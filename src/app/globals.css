@@ -1,0 +1,319 @@
+@import "tailwindcss";
+
+/* Proposed brand: walnut dark wood, brass lamplight, cream linen, oxblood leather booths. */
+@theme {
+  --color-walnut-950: #0d0805;
+  --color-walnut-900: #17100a;
+  --color-walnut-850: #1c140c;
+  --color-walnut-800: #241a10;
+  --color-walnut-700: #332415;
+  --color-walnut-600: #4a3420;
+  --color-brass: #c9963c;
+  --color-brass-bright: #e8bb63;
+  --color-brass-deep: #8a6424;
+  --color-cream: #f5ead6;
+  --color-linen: #e8dbc2;
+  --color-tan: #b7a284;
+  --color-oxblood: #7d2324;
+  --color-oxblood-bright: #a8383a;
+  --color-go: #9fd38a;
+
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-hand: var(--font-caveat), "Bradley Hand", cursive;
+}
+
+html {
+  scroll-padding-top: 5.5rem;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+/* Phones/tablets: the sticky header is two rows (bar + jump nav) */
+@media (max-width: 1023.98px) {
+  html {
+    scroll-padding-top: 6.25rem;
+  }
+}
+
+body {
+  background: var(--color-walnut-900);
+  color: var(--color-cream);
+  overflow-x: hidden; /* fallback for older iOS Safari */
+  overflow-x: clip;
+}
+
+/* Expressive serif headline: Fraunces at display optical size, a little soft and wonky */
+.display {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 50, "WONK" 1;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+}
+.display em,
+.display-italic {
+  font-style: italic;
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+}
+
+/* Letterspaced all-caps micro-label: the connective tissue between sections */
+.label {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Film grain over dark sections; no photos, so texture does the work */
+.grain {
+  position: relative;
+  isolation: isolate;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Dark walnut tabletop: long grain + a warm lamp pool from above */
+.tabletop {
+  background:
+    radial-gradient(ellipse 60% 55% at 50% 42%, rgb(232 187 99 / 0.16), transparent 70%),
+    repeating-linear-gradient(
+      93deg,
+      rgb(0 0 0 / 0) 0px,
+      rgb(0 0 0 / 0.14) 3px,
+      rgb(0 0 0 / 0) 9px,
+      rgb(255 220 170 / 0.025) 15px,
+      rgb(0 0 0 / 0) 26px
+    ),
+    linear-gradient(180deg, #24180e 0%, #1a110a 60%, #120c07 100%);
+}
+
+/* Brass: primary buttons and fittings */
+.brass {
+  background: linear-gradient(180deg, #ecc271 0%, #c9963c 50%, #a37526 100%);
+  color: var(--color-walnut-950);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.4),
+    inset 0 -2px 0 rgb(0 0 0 / 0.2),
+    0 10px 28px -10px rgb(201 150 60 / 0.6);
+}
+.brass:hover {
+  background: linear-gradient(180deg, #f3cd80 0%, #d6a447 50%, #ad7f2d 100%);
+}
+.brass-text {
+  background: linear-gradient(180deg, #f3cd80 0%, #c9963c 60%, #9c7026 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.brass-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(201 150 60 / 0.6), transparent);
+}
+
+/* Pressed-tin / menu-card panel */
+.card {
+  background: linear-gradient(180deg, rgb(255 240 210 / 0.045), rgb(255 240 210 / 0.015));
+  border: 1px solid rgb(201 150 60 / 0.2);
+  box-shadow: inset 0 1px 0 rgb(255 240 210 / 0.05);
+}
+
+.tap {
+  transition: transform 0.12s ease;
+}
+.tap:active {
+  transform: scale(0.97);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brass-bright);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Doneness slider */
+.doneness-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2.75rem;
+  background: transparent;
+  cursor: pointer;
+}
+.doneness-range::-webkit-slider-runnable-track {
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #a3182a, #bf3346 25%, #cf6a6c 50%, #bb8478 75%, #94664f);
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.5);
+}
+.doneness-range::-moz-range-track {
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #a3182a, #bf3346 25%, #cf6a6c 50%, #bb8478 75%, #94664f);
+}
+.doneness-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px;
+  height: 28px;
+  margin-top: -9px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f6d58f, #c9963c 55%, #8a6424);
+  border: 2px solid #17100a;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.5);
+}
+.doneness-range::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f6d58f, #c9963c 55%, #8a6424);
+  border: 2px solid #17100a;
+}
+
+/* ------------------------------------------------------------------
+   Plate art (PlateArt.tsx). Everything eases; nothing snaps.
+   ------------------------------------------------------------------ */
+.plate-ease {
+  transition:
+    transform 0.6s cubic-bezier(0.34, 1.4, 0.64, 1),
+    opacity 0.4s ease;
+}
+.plate-fill {
+  transition: fill 0.6s ease;
+}
+.plate-pool {
+  transition:
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s,
+    opacity 0.5s ease 0.35s;
+}
+.plate-cut {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .steam path {
+    animation: steam 4.5s ease-in-out infinite;
+    stroke-dasharray: 60 140;
+  }
+  .steam path:nth-child(2) {
+    animation-delay: 1.4s;
+  }
+  .steam path:nth-child(3) {
+    animation-delay: 2.7s;
+  }
+  @keyframes steam {
+    0% { stroke-dashoffset: 120; opacity: 0; }
+    30% { opacity: 0.55; }
+    100% { stroke-dashoffset: -80; opacity: 0; }
+  }
+
+  .side-drop {
+    animation: side-drop 0.55s cubic-bezier(0.34, 1.5, 0.64, 1) both;
+  }
+  @keyframes side-drop {
+    from { transform: translateY(-36px) scale(0.85); opacity: 0; }
+    to { transform: none; opacity: 1; }
+  }
+
+  .ladle-pour {
+    animation: ladle 1.15s ease-in-out both;
+  }
+  @keyframes ladle {
+    0% { transform: translate(60px, -90px) rotate(0deg); opacity: 0; }
+    18% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    45% { transform: translate(0, 0) rotate(-38deg); opacity: 1; }
+    75% { transform: translate(0, 0) rotate(-38deg); opacity: 1; }
+    100% { transform: translate(60px, -90px) rotate(0deg); opacity: 0; }
+  }
+  .jus-stream {
+    animation: stream 1.15s ease-in-out both;
+  }
+  @keyframes stream {
+    0%, 38% { stroke-dashoffset: 120; opacity: 0; }
+    48% { opacity: 1; }
+    70% { stroke-dashoffset: 0; opacity: 1; }
+    82%, 100% { stroke-dashoffset: -120; opacity: 0; }
+  }
+
+  .knife-swipe {
+    animation: knife 0.95s cubic-bezier(0.55, 0, 0.3, 1) both;
+  }
+  @keyframes knife {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    /* Resting at -28°; -62° more lays the blade flat, pointing left, along the cut line */
+    25% { transform: translate(-120px, -78px) rotate(-62deg); }
+    70% { transform: translate(-288px, -78px) rotate(-62deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+  }
+
+  .panel-in {
+    animation: panel-in 0.35s ease-out both;
+  }
+  @keyframes panel-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .flicker {
+    animation: flicker 3.2s ease-in-out infinite;
+  }
+  @keyframes flicker {
+    0%, 100% { opacity: 0.85; transform: scale(1); }
+    30% { opacity: 1; transform: scale(1.04, 0.97); }
+    55% { opacity: 0.78; transform: scale(0.97, 1.03); }
+    80% { opacity: 0.95; }
+  }
+
+  .pulse-dot {
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgb(159 211 138 / 0.6); }
+    50% { box-shadow: 0 0 0 6px rgb(159 211 138 / 0); }
+  }
+
+  .ticket-line {
+    animation: ticket-line 0.4s ease-out both;
+  }
+  @keyframes ticket-line {
+    from { opacity: 0; clip-path: inset(0 100% 0 0); }
+    to { opacity: 1; clip-path: inset(0 0 0 0); }
+  }
+
+  /* Phones/tablets: scroll reveals (MobileMotion.tsx owns data-pending) */
+  .m-motion [data-reveal] {
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .m-motion [data-reveal][data-pending] {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+/* Horizontal swipe rows on phones */
+.swipe {
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.swipe::-webkit-scrollbar {
+  display: none;
+}
+.swipe > * {
+  scroll-snap-align: start;
+}

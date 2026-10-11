@@ -1,0 +1,28 @@
+[build]
+  command = "npm run build"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Static export only - skip Netlify's Next.js server runtime.
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+
+# Hashed build assets never change, so cache them for a year.
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/og-image.png"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# Search-engine blocking for the preview lives in the page's robots meta tag,
+# driven by `spec` in src/lib/site.ts, so going live is a single switch.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"

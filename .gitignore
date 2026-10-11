@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+.netlify/
+.env*
+.DS_Store
+
+# Local-only: pitch notes and preview config
+chances-r-restaurant-spec-prompt.md
+.claude/
