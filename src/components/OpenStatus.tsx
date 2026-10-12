@@ -43,7 +43,7 @@ export function HoursTable() {
             </dt>
             <dd className={`tabular-nums ${today ? "font-semibold" : ""}`}>
               {h.time}
-              {h.note && <span className="ml-1.5 text-brass">· {h.note}</span>}
+              {h.note && <span className="text-brass">{" · "}{h.note}</span>}
             </dd>
           </div>
         );

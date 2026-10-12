@@ -37,7 +37,10 @@ export function Trust() {
               <dd>
                 <span className="display block text-5xl text-brass-bright max-sm:text-4xl">{n.big}</span>
                 {n.stars && <Stars score={4.3} className="mt-1 text-brass-bright" />}
-                <span className="mt-2 block text-sm text-tan max-sm:text-xs">{n.small}</span>
+                {/* the <dt> above already names this for screen readers */}
+                <span aria-hidden="true" className="mt-2 block text-sm text-tan max-sm:text-xs">
+                  {n.small}
+                </span>
               </dd>
             </div>
           ))}
@@ -105,7 +108,16 @@ export function Visit() {
           </div>
           <div className="mt-5 rounded-2xl bg-walnut-950/60 p-4">
             <p className="label text-brass">{carryOut.note}</p>
-            <p className="mt-1 tabular-nums text-cream">{carryOut.time}</p>
+            <dl className="mt-1 space-y-0.5">
+              {carryOut.windows.map((w) => (
+                <div key={w.label} className="flex items-baseline justify-between gap-4">
+                  <dt className="text-cream">
+                    {w.label} <span className="text-sm text-tan">· {w.days}</span>
+                  </dt>
+                  <dd className="tabular-nums text-cream">{w.time}</dd>
+                </div>
+              ))}
+            </dl>
             <p className="mt-1 text-xs text-tan">{carryOut.fine}</p>
           </div>
           <p className="mt-4 text-sm text-tan">

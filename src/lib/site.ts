@@ -55,8 +55,12 @@ export const hours: { label: string; days: number[]; time: string; open: number;
 
 export const hoursSchema = ["Mo-Tu 11:00-21:00", "We-Fr 07:00-21:00", "Sa 08:00-21:00", "Su 08:00-15:00"];
 
+// Their site lists delivery "daily" 11–2 and 5–9, but Sunday closes at 3, so dinner runs Mon–Sat.
 export const carryOut = {
-  time: "11am – 2pm & 5pm – 9pm",
+  windows: [
+    { label: "Lunch", time: "11am – 2pm", days: "Daily" },
+    { label: "Dinner", time: "5pm – 9pm", days: "Mon – Sat" },
+  ],
   note: "Carry-out & local delivery",
   fine: "Local delivery as staffing allows. Out-of-town by arrangement.",
 };
