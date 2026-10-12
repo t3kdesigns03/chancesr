@@ -483,3 +483,9 @@ a[href^="tel:"]:not(.brass) {
     opacity: 1;
   }
 }
+
+/* Optical centering for tracked caps: letter-spacing adds space after the last letter too,
+   which pushes a centered line left by half a letter-space. Pull it back on centered phone layouts. */
+@utility optical-track {
+  margin-right: -0.22em;
+}

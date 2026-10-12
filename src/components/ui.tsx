@@ -29,10 +29,13 @@ export function CallButton({
   className = "",
   size = "md",
   children,
+  balance = false,
 }: {
   className?: string;
   size?: "sm" | "md" | "lg";
   children?: ReactNode;
+  /** full-width phone buttons: mirror the icon with an invisible spacer so the label is optically centered */
+  balance?: boolean;
 }) {
   const sz =
     size === "lg"
@@ -51,6 +54,7 @@ export function CallButton({
           Call <span className="whitespace-nowrap tabular-nums">{site.phone.display}</span> for a table
         </span>
       )}
+      {balance && <span aria-hidden="true" className={`shrink-0 sm:hidden ${size === "sm" ? "w-4" : "w-5"}`} />}
     </a>
   );
 }

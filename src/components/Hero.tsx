@@ -46,11 +46,13 @@ export default function Hero() {
 
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:flex lg:min-h-[min(calc(100svh-4.5rem),50rem)] lg:items-center lg:px-8">
         <div className="relative max-w-[37rem] pb-10 max-lg:-mt-20 max-lg:mx-auto max-lg:text-center max-sm:-mt-14 lg:py-16">
-          <p className="label text-brass-bright max-sm:text-[0.58rem]">
+          <p className="label text-brass-bright max-lg:optical-track max-sm:text-[0.58rem]">
             <span className="max-sm:hidden">Steakhouse <Dot /> Supper club <Dot /> </span>Est. {site.founded} <Dot /> York, Nebraska
           </p>
-          <h1 id="hero-title" className="display mt-4 text-[2.4rem] text-cream min-[400px]:text-[2.7rem] drop-shadow-[0_4px_24px_rgb(0_0_0/0.6)] sm:text-6xl lg:text-[4.6rem] xl:text-[5rem]">
-            Supper, the way <em className="brass-text pr-1">York remembers&nbsp;it.</em>
+          <h1 id="hero-title" className="display mt-4 text-[min(2.7rem,10.4vw)] text-cream drop-shadow-[0_4px_24px_rgb(0_0_0/0.6)] sm:text-6xl lg:text-[4.6rem] xl:text-[5rem]">
+            Supper, the way
+            <br />
+            <em className="brass-text whitespace-nowrap pr-1">York remembers it.</em>
           </h1>
           <p className="display mt-5 text-balance text-[1.35rem] leading-snug text-linen max-sm:mt-4 max-sm:text-lg lg:max-w-[33rem]">
             Prime rib you can cut with a butter knife. Pan-fried chicken. The Hob-Nob Lounge. Downtown since {site.founded}.
@@ -61,9 +63,10 @@ export default function Hero() {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3 max-lg:justify-center max-sm:mt-6 max-sm:flex-col max-sm:items-stretch">
-            <CallButton size="lg" />
+            <CallButton size="lg" balance />
             <NavLink href="#plate" className="deco-clip tap inline-flex bg-brass/70 p-px hover:bg-brass">
               <span className="deco-clip inline-flex min-h-[3.4rem] w-full items-center justify-center gap-2 bg-walnut-900 px-6 text-lg font-semibold text-cream max-sm:min-h-13 max-sm:text-base">
+                <span aria-hidden="true" className="w-4 shrink-0 sm:hidden" />
                 Build your plate
                 <svg viewBox="0 0 20 20" className="h-4 w-4 text-brass-bright" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                   <path d="M10 4v12M5 11l5 5 5-5" />
@@ -83,16 +86,16 @@ export default function Hero() {
             <span className="h-px flex-1 bg-gradient-to-l from-transparent to-brass/50" />
           </div>
           <ul className="label mt-4 flex flex-wrap gap-x-5 gap-y-2.5 text-[0.62rem] text-linen max-lg:justify-center">
-            <li className="flex items-center gap-2">
+            <li className="flex items-center gap-2 max-lg:relative max-lg:optical-track max-lg:[&>span:first-child]:absolute max-lg:[&>span:first-child]:right-full max-lg:[&>span:first-child]:mr-2">
               <OpenText />
             </li>
             <li>
-              <a href={site.maps.directions} target="_blank" rel="noopener" className="flex items-center gap-1.5 hover:text-brass-bright">
-                <PinIcon className="h-3.5 w-3.5 text-brass" />
+              <a href={site.maps.directions} target="_blank" rel="noopener" className="flex items-center gap-1.5 hover:text-brass-bright max-lg:relative max-lg:optical-track">
+                <PinIcon className="h-3.5 w-3.5 text-brass max-lg:absolute max-lg:right-full max-lg:mr-1.5" />
                 {site.address.street}, downtown York
               </a>
             </li>
-            <li className="flex items-center gap-1.5">
+            <li className="flex items-center gap-1.5 max-lg:optical-track">
               <Stars score={4.3} className="text-[0.8rem] text-brass-bright" />
               {site.rating.google.score} · {site.rating.google.count} Google reviews
             </li>

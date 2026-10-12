@@ -97,7 +97,9 @@ function JumpBar({ base }: { base: string }) {
     function place(scroll: boolean) {
       const chip = active ? box!.querySelector<HTMLElement>(`[data-jump="${active}"]`) : null;
       if (!chip || !chip.offsetWidth) {
+        // Back in the hero (or nothing active yet): hide the pill and rest the strip at its start.
         p!.style.opacity = "0";
+        box!.scrollTo({ left: 0, behavior: scroll ? "smooth" : "auto" });
         return;
       }
       p!.style.opacity = "1";
@@ -115,7 +117,7 @@ function JumpBar({ base }: { base: string }) {
     <nav aria-label="Jump to section" className="border-t border-white/[0.05]">
       <div
         ref={scroller}
-        className="relative mx-auto flex max-w-6xl gap-1 overflow-x-auto px-3 py-1.5 [scrollbar-width:none] sm:justify-center sm:px-5 [&::-webkit-scrollbar]:hidden"
+        className="relative mx-auto flex max-w-6xl justify-[safe_center] gap-1 overflow-x-auto px-3 py-1.5 [scrollbar-width:none] sm:px-5 [&::-webkit-scrollbar]:hidden"
       >
         <span
           ref={pill}
