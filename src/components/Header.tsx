@@ -24,7 +24,7 @@ export default function Header({ home = true }: { home?: boolean }) {
   return (
     <header
       className={`sticky top-0 z-50 border-b transition-colors duration-300 ${
-        scrolled ? "border-brass/15 bg-walnut-950/95 lg:bg-walnut-950/90 lg:backdrop-blur-md" : "border-transparent bg-walnut-950/80 lg:bg-walnut-950/40 lg:backdrop-blur-sm"
+        scrolled ? "border-brass/15 bg-walnut-950" : "border-transparent bg-walnut-950 lg:bg-walnut-950/40 lg:backdrop-blur-sm"
       }`}
     >
       {/* Desktop */}

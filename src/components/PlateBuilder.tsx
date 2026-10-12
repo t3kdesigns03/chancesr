@@ -294,7 +294,7 @@ export default function PlateBuilder() {
         </div>
 
         {/* Builder */}
-        <div className="mt-10 grid items-center gap-6 max-sm:mt-6 lg:items-start lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)_minmax(0,19rem)] xl:gap-10">
+        <div className="mt-10 grid grid-cols-[minmax(0,1fr)] items-center gap-6 max-sm:mt-6 lg:items-start lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)_minmax(0,19rem)] xl:gap-10">
           {/* Left menu card: 01, 02, knife (desktop) */}
           <div className="flex flex-col gap-4 max-lg:hidden">
             {steps.slice(0, 2).map((s) => (
@@ -306,7 +306,7 @@ export default function PlateBuilder() {
           </div>
 
           {/* The plate */}
-          <div className="relative mx-auto w-full max-w-[34rem] max-lg:max-w-[28rem] lg:self-center">
+          <div className="relative mx-auto w-full max-w-[34rem] max-lg:max-w-[28rem] max-sm:max-w-[70vw] lg:self-center">
             <PlateArt
               scale={c.scale}
               center={d.center}
@@ -359,9 +359,9 @@ export default function PlateBuilder() {
           </div>
 
           {/* Phones & tablets: one step at a time */}
-          <div className="mx-auto w-full max-w-xl lg:hidden">
-            <div className="flex items-center gap-2">
-              <div role="tablist" aria-label="Build your plate" className="grid flex-1 grid-cols-4 gap-1 rounded-full border border-white/10 bg-walnut-950/60 p-1">
+          <div className="mx-auto w-full min-w-0 max-w-xl lg:hidden">
+            <div className="flex min-w-0 items-center gap-2">
+              <div role="tablist" aria-label="Build your plate" className="grid min-w-0 flex-1 grid-cols-4 gap-0.5 rounded-full border border-white/10 bg-walnut-950/60 p-1">
                 {steps.map((s, i) => (
                   <button
                     key={s.n}
@@ -372,11 +372,11 @@ export default function PlateBuilder() {
                       buzz(6);
                       setTab(i);
                     }}
-                    className={`tap rounded-full py-2 text-center text-[0.78rem] font-semibold leading-none transition-colors ${
+                    className={`tap min-w-0 whitespace-nowrap rounded-full px-0.5 py-2 text-center text-[0.78rem] font-semibold leading-none transition-colors max-[400px]:text-[0.72rem] ${
                       tab === i ? "brass" : "text-tan"
                     }`}
                   >
-                    <span className="display italic max-[360px]:hidden">{s.n}</span> {s.tab}
+                    <span className="display italic max-[400px]:hidden">{s.n}</span> {s.tab}
                   </button>
                 ))}
               </div>

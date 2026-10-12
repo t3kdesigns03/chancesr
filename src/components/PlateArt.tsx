@@ -125,7 +125,7 @@ export default function PlateArt({
   const slice = (
     <>
       {/* crust */}
-      <path d={MEAT} fill={`url(#${u("crust")})`} stroke="#2a1108" strokeWidth="2.5" />
+      <path d={MEAT} fill={`url(#${u("crust")})`} stroke="#160602" strokeWidth="3.5" />
       <rect x="-130" y="-110" width="260" height="220" fill="#000" filter={`url(#${u("bark")})`} clipPath={`url(#${u("whole")})`} opacity="0.8" />
       <path d={FAT_EDGE} fill="none" stroke={`url(#${u("fat")})`} strokeWidth="13" strokeLinecap="round" clipPath={`url(#${u("whole")})`} opacity="0.9" />
       {/* cooked band, then the pink-to-red center */}
@@ -134,7 +134,9 @@ export default function PlateArt({
         <path d={MEAT} className="plate-fill plate-ease" fill={center} style={{ transform: `translate(4px, 12px) scale(${size})` }} />
       </g>
       {/* muscle grain over the face */}
-      <rect x="-130" y="-110" width="260" height="220" fill="#000" filter={`url(#${u("grain")})`} clipPath={`url(#${u("inner")})`} opacity="0.9" />
+      <rect x="-130" y="-110" width="260" height="220" fill="#000" filter={`url(#${u("grain")})`} clipPath={`url(#${u("inner")})`} opacity="1" />
+      <path d={MEAT} transform="scale(0.9)" fill={`url(#${u("shade")})`} />
+      <path d={MEAT} transform="scale(0.9)" fill="none" stroke="#2a0c06" strokeOpacity="0.45" strokeWidth="4" filter={`url(#${u("blur4")})`} />
       <path d={SEAM} fill="none" stroke="#efdcb4" strokeWidth="5" strokeLinecap="round" opacity="0.85" />
       <path d={SEAM} fill="none" stroke="#fff6e0" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" transform="translate(0 -1.5)" />
       <path d={KERNEL} fill="#ecd6a8" opacity="0.9" />
@@ -172,8 +174,16 @@ export default function PlateArt({
           <stop offset="1" stopColor="#e3b762" />
         </linearGradient>
         <radialGradient id={u("crust")} cx="0.45" cy="0.4" r="0.65">
-          <stop offset="0.6" stopColor="#7b3818" />
-          <stop offset="1" stopColor="#3f1a09" />
+          <stop offset="0.5" stopColor="#6a2e12" />
+          <stop offset="0.85" stopColor="#3a1607" />
+          <stop offset="1" stopColor="#1e0a03" />
+        </radialGradient>
+        {/* Shading over the cut face: lit in the middle, falling off toward the seared edge */}
+        <radialGradient id={u("shade")} cx="0.42" cy="0.42" r="0.62">
+          <stop offset="0" stopColor="#fff2e6" stopOpacity="0.16" />
+          <stop offset="0.45" stopColor="#3a0a08" stopOpacity="0" />
+          <stop offset="0.8" stopColor="#3a0a08" stopOpacity="0.32" />
+          <stop offset="1" stopColor="#1e0504" stopOpacity="0.6" />
         </radialGradient>
         <linearGradient id={u("fat")} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#e6c890" />
@@ -214,8 +224,8 @@ export default function PlateArt({
         </filter>
         {/* Long, stringy muscle fibers: stretched noise, dark-red where dense, clear where not */}
         <filter id={u("grain")} x="0" y="0" width="100%" height="100%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.035 0.16" numOctaves="3" seed="7" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0.35  0 0 0 0 0.04  0 0 0 0 0.06  0 0 0 -2.2 1.35" />
+          <feTurbulence type="fractalNoise" baseFrequency="0.04 0.22" numOctaves="3" seed="7" />
+          <feColorMatrix type="matrix" values="0 0 0 0 0.3  0 0 0 0 0.03  0 0 0 0 0.05  0 0 0 -2.8 1.7" />
         </filter>
         {/* Seared bark: coarse dark speckle */}
         <filter id={u("bark")} x="0" y="0" width="100%" height="100%">

@@ -77,8 +77,8 @@ export default function Food() {
         </p>
 
         {/* "R" Buffets: their photo, the real upcoming dates */}
-        <div data-reveal="" className="relative mt-6 grid overflow-hidden rounded-3xl border border-brass/40 bg-gradient-to-br from-oxblood/45 via-walnut-900 to-walnut-900 md:grid-cols-[0.95fr_1.05fr]">
-          <div className="relative min-h-48 max-md:aspect-[16/8]">
+        <div data-reveal="" className="relative mt-6 grid grid-cols-[minmax(0,1fr)] overflow-hidden rounded-3xl border border-brass/40 bg-gradient-to-br from-oxblood/45 via-walnut-900 to-walnut-900 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+          <div className="relative max-md:aspect-[16/8] md:min-h-48">
             <Photo
               name="buffet"
               alt="The buffet table at Chances R: fresh fruit, salads and sides in the Tommy-Suz Beer Garden"
