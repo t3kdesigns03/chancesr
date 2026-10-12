@@ -16,6 +16,18 @@ export function OpenBadge({ className = "" }: { className?: string }) {
   );
 }
 
+/** One-line live status for the hero strip. */
+export function OpenText() {
+  const s = useStatus();
+  if (!s) return <span className="inline-block h-3 w-28" />;
+  return (
+    <>
+      <span className={`h-1.5 w-1.5 rounded-full ${s.open ? "pulse-dot bg-go" : "bg-tan/60"}`} />
+      <span className={s.open ? "text-go" : ""}>{s.text}</span>
+    </>
+  );
+}
+
 /** The hours table, with today's row lit. */
 export function HoursTable() {
   const s = useStatus();

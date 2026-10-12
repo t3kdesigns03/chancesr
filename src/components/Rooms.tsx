@@ -15,13 +15,13 @@ const rooms = [
   {
     kicker: "Banquets & catering",
     name: "West Room · East Room",
-    line: "The West Room for the corporate crowd. The East Room for the smaller, closer gatherings. Or we bring supper to you.",
+    line: "Company parties, trainings, retirements, wedding receptions. The West Room for the corporate crowd, the East Room for smaller gatherings. Or we bring supper to you.",
     email: true,
   },
   {
     kicker: carryOut.time,
     name: "Carry-out & local delivery",
-    line: "Same kitchen, your kitchen table. Call it in.",
+    line: "Same kitchen, your kitchen table. Pick it up, or we'll bring it, as staffing allows.",
   },
 ];
 

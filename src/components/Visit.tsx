@@ -105,6 +105,7 @@ export function Visit() {
           <div className="mt-5 rounded-2xl bg-walnut-950/60 p-4">
             <p className="label text-brass">{carryOut.note}</p>
             <p className="mt-1 tabular-nums text-cream">{carryOut.time}</p>
+            <p className="mt-1 text-xs text-tan">{carryOut.fine}</p>
           </div>
           <p className="mt-4 text-sm text-tan">Prime rib buffet weekends and Sunday brunch rotate. Call {site.phone.display} for the next one.</p>
         </div>

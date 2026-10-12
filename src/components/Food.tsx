@@ -1,5 +1,6 @@
 import { quotes, site } from "@/lib/site";
 import { Container, SectionLabel, SectionTitle } from "./ui";
+import UpcomingBuffets from "./UpcomingBuffets";
 
 type Dish = { art: "rib" | "chicken" | "mash" | "pie"; name: string; line: string; quote: string };
 
@@ -43,34 +44,44 @@ export default function Food() {
           Swipe for more →
         </p>
 
-        {/* Rotating specials */}
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <Special
-            kicker="Weekends"
-            title="Prime rib buffet"
-            quote={quotes.buffet}
-            note="Dates rotate."
-          />
-          <Special kicker="Sundays · 8am – 3pm" title="Sunday brunch" quote="" note="The after-church line. Dates rotate." />
+        {/* "R" Buffets: the real upcoming dates, plus the real menus */}
+        <div data-reveal="" className="relative mt-6 grid gap-6 overflow-hidden rounded-3xl border border-brass/40 bg-gradient-to-br from-oxblood/45 via-walnut-900 to-walnut-900 p-7 max-sm:p-5 md:grid-cols-[0.9fr_1.1fr] md:gap-10">
+          <div>
+            <p className="label text-brass-bright">&ldquo;R&rdquo; Buffets</p>
+            <p className="display mt-2 text-4xl text-cream max-sm:text-3xl">
+              Prime rib buffet <em className="brass-text">&amp; Sunday brunch</em>
+            </p>
+            <p className="mt-3 italic text-linen">&ldquo;{quotes.buffet}&rdquo;</p>
+            <p className="mt-4 text-linen max-sm:text-sm">
+              Reservations highly suggested.{" "}
+              <a href={site.phone.href} className="font-semibold text-brass-bright underline decoration-brass/40 underline-offset-4 hover:decoration-brass">
+                Call {site.phone.display}.
+              </a>
+            </p>
+          </div>
+          <div>
+            <p className="label text-tan">Coming up</p>
+            <UpcomingBuffets />
+          </div>
+        </div>
+
+        <div data-reveal="" className="mt-4 flex flex-wrap items-center justify-center gap-3 text-sm max-sm:flex-col max-sm:items-stretch">
+          <MenuLink href={site.menus.main}>The full menu</MenuLink>
+          <MenuLink href={site.menus.breakfast}>Breakfast menu</MenuLink>
         </div>
       </Container>
     </section>
   );
 }
 
-function Special({ kicker, title, quote, note }: { kicker: string; title: string; quote: string; note: string }) {
+function MenuLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <div data-reveal="" className="relative overflow-hidden rounded-3xl border border-brass/40 bg-gradient-to-br from-oxblood/50 to-walnut-900 p-6 max-sm:p-5">
-      <p className="label text-brass-bright">{kicker}</p>
-      <p className="display mt-2 text-4xl text-cream max-sm:text-3xl">{title}</p>
-      {quote && <p className="mt-2 italic text-linen">&ldquo;{quote}&rdquo;</p>}
-      <p className="mt-3 text-linen max-sm:text-sm">
-        {note}{" "}
-        <a href={site.phone.href} className="font-semibold text-brass-bright underline decoration-brass/40 underline-offset-4 hover:decoration-brass">
-          Call {site.phone.display} for the next one.
-        </a>
-      </p>
-    </div>
+    <a href={href} target="_blank" rel="noopener" className="deco-clip tap inline-flex bg-brass/50 p-px hover:bg-brass">
+      <span className="deco-clip inline-flex min-h-12 w-full items-center justify-center gap-2 bg-walnut-950 px-6 font-semibold text-cream">
+        {children}
+        <span className="label text-[0.55rem] text-brass">PDF</span>
+      </span>
+    </a>
   );
 }
 

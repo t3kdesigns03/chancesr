@@ -27,6 +27,12 @@ export const site = {
     google: { score: "4.3", count: "320+" },
     tripadvisor: { rank: 1, of: 33, count: "440+" },
   },
+  // Their current menus live on the old site as PDFs. Move these when the web address switches over.
+  menus: {
+    main: "https://www.chancesryork.com/s/Chances-R-Menu-52026.pdf",
+    breakfast: "https://www.chancesryork.com/s/Breakfast-Menu-672026.pdf",
+  },
+  facebook: "https://www.facebook.com/ChancesRYork",
   maps: {
     directions:
       "https://www.google.com/maps/dir/?api=1&destination=Chances+R+Restaurant+%26+Lounge%2C+124+W+5th+St%2C+York%2C+NE+68467",
@@ -47,7 +53,20 @@ export const hours: { label: string; days: number[]; time: string; open: number;
 
 export const hoursSchema = ["Mo-Tu 11:00-21:00", "We-Fr 07:00-21:00", "Sa 08:00-21:00", "Su 08:00-15:00"];
 
-export const carryOut = { time: "11am – 2pm & 5pm – 9pm", note: "Carry-out & local delivery, daily" };
+export const carryOut = {
+  time: "11am – 2pm & 5pm – 9pm",
+  note: "Carry-out & local delivery",
+  fine: "Local delivery as staffing allows. Out-of-town by arrangement.",
+};
+
+// From the "R" Buffets page, Oct 2026. Past dates hide themselves (see UpcomingBuffets).
+// Leave this list empty and the site just says "call for the next one".
+export const buffets: { date: string; label: string; time: string }[] = [
+  { date: "2026-11-26", label: "Thanksgiving Brunch", time: "10am – 2pm" },
+  { date: "2026-11-27", label: "Prime Rib Buffet", time: "from 5pm" },
+  { date: "2026-12-19", label: "Prime Rib Buffet", time: "from 5pm" },
+  { date: "2026-12-20", label: "Sunday Brunch", time: "10am – 2pm" },
+];
 
 // Verbatim from public reviews.
 export const quotes = {

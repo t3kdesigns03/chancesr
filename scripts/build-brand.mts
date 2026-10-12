@@ -3,7 +3,7 @@
 //
 //   src/app/icon.svg                     favicon (Next serves it automatically)
 //   src/app/apple-icon.png               180×180 home-screen icon
-//   public/og-image.png                  1200×630 share card for texts and Facebook
+//   public/og-image.png                  1200×630 share card (needs `npm run hero` first for the painting)
 //   public/brand/chancesr-lockup.svg/.png    badge + wordmark, transparent (for dark backgrounds)
 //   public/brand/chancesr-profile.png        1080×1080 profile picture; everything sits inside the circle
 //
@@ -26,6 +26,23 @@ const serif = loadFont("@fontsource/fraunces/files/fraunces-latin-400-normal.wof
 const serifItalic = loadFont("@fontsource/fraunces/files/fraunces-latin-600-italic.woff");
 const sans = loadFont("@fontsource/hanken-grotesk/files/hanken-grotesk-latin-700-normal.woff");
 
+// opentype's own toPathData() emits malformed data for some glyphs (e.g. a second "m"), and librsvg
+// stops drawing the whole path at the first bad token. Serialize the commands ourselves.
+const n = (v: number) => (Math.round(v * 100) / 100).toString();
+function pathData(p: opentype.Path) {
+  return p.commands
+    .map((c) =>
+      c.type === "Z"
+        ? "Z"
+        : c.type === "Q"
+          ? `Q${n(c.x1)} ${n(c.y1)} ${n(c.x)} ${n(c.y)}`
+          : c.type === "C"
+            ? `C${n(c.x1)} ${n(c.y1)} ${n(c.x2)} ${n(c.y2)} ${n(c.x)} ${n(c.y)}`
+            : `${c.type}${n(c.x)} ${n(c.y)}`,
+    )
+    .join("");
+}
+
 /** Text as outlined path data, with letter-spacing. align: 0 = left, 0.5 = center. */
 function outline(font: opentype.Font, text: string, x: number, y: number, size: number, tracking = 0, align = 0) {
   const adv = (ch: string) => ((font.charToGlyph(ch).advanceWidth ?? 0) * size) / font.unitsPerEm;
@@ -33,7 +50,7 @@ function outline(font: opentype.Font, text: string, x: number, y: number, size: 
   let cx = x - width * align;
   let d = "";
   for (const ch of text) {
-    d += font.charToGlyph(ch).getPath(cx, y, size).toPathData(2);
+    d += pathData(font.charToGlyph(ch).getPath(cx, y, size));
     cx += adv(ch) + tracking;
   }
   return { d, width };
@@ -77,36 +94,58 @@ await sharp(Buffer.from(lockup)).png().toFile(join(brandDir, "chancesr-lockup.pn
 const profile = `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="-6 -6 76 76"><defs>${BRASS}${FACE}</defs><rect x="-6" y="-6" width="76" height="76" fill="#17100a"/>${badge()}</svg>`;
 await sharp(Buffer.from(profile)).png().toFile(join(brandDir, "chancesr-profile.png"));
 
-// ---- Share card (1200×630) -------------------------------------------------------
+// ---- Share card (1200×630): copy left, the hero painting right -----------------
 const W = 1200;
 const H = 630;
-const kicker = outline(sans, "SINCE 1932 · DOWNTOWN YORK, NEBRASKA", W / 2, 236, 17, 5, 0.5);
-const l1 = outline(serif, "Supper, the way", W / 2, 330, 86, -1.5, 0.5);
-const l2 = outline(serifItalic, "York remembers it.", W / 2, 428, 86, -1.5, 0.5);
-const line = outline(sans, "PRIME RIB YOU CAN CUT WITH A BUTTER KNIFE", W / 2, 498, 16, 4, 0.5);
-const phone = outline(sans, "(402) 362-7755", W / 2, 560, 26, 1.5, 0.5);
-const og = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+// Feather the painting's edges per pixel (librsvg won't composite SVG masks): horizontal × vertical alpha ramps.
+const PW = 720;
+const PH = 550;
+const smooth = (t: number) => t * t * (3 - 2 * t);
+const ramp = (t: number, inEnd: number, outStart: number) =>
+  t < inEnd ? smooth(t / inEnd) : t > outStart ? smooth((1 - t) / (1 - outStart)) : 1;
+const { data: rgb } = await sharp(join(root, "assets-src", "hero-plate-og.png"))
+  .resize(PW, PH, { fit: "cover" })
+  .removeAlpha()
+  .raw()
+  .toBuffer({ resolveWithObject: true });
+const rgba = Buffer.alloc(PW * PH * 4);
+for (let y = 0; y < PH; y++) {
+  const ay = ramp(y / (PH - 1), 0.12, 0.86);
+  for (let x = 0; x < PW; x++) {
+    const i = y * PW + x;
+    rgba[i * 4] = rgb[i * 3];
+    rgba[i * 4 + 1] = rgb[i * 3 + 1];
+    rgba[i * 4 + 2] = rgb[i * 3 + 2];
+    rgba[i * 4 + 3] = Math.round(255 * ay * ramp(x / (PW - 1), 0.4, 0.94));
+  }
+}
+const painting = (await sharp(rgba, { raw: { width: PW, height: PH, channels: 4 } }).png().toBuffer()).toString("base64");
+const kicker = outline(sans, "EST. 1932 · YORK, NEBRASKA", 72, 214, 15, 4.5);
+const l1 = outline(serif, "Supper, the way", 70, 296, 58, -1.1);
+const l2 = outline(serifItalic, "York remembers it.", 70, 364, 58, -1.1);
+const line = outline(sans, "PRIME RIB YOU CAN CUT", 72, 424, 13, 3.4);
+const line2 = outline(sans, "WITH A BUTTER KNIFE", 72, 446, 13, 3.4);
+const phone = outline(sans, "(402) 362-7755", 72, 524, 28, 1.2);
+const name = outline(serif, "Chances", 136, 122, 30);
+const nameR = outline(serifItalic, "“R”", 136 + name.width + 8, 122, 30);
+const og = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <defs>${BRASS}${FACE}
-    <radialGradient id="lamp" cx="0.5" cy="0.3" r="0.6"><stop offset="0" stop-color="#e8bb63" stop-opacity="0.28"/><stop offset="1" stop-color="#e8bb63" stop-opacity="0"/></radialGradient>
-    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#24180e"/><stop offset="1" stop-color="#120c07"/></linearGradient>
-    <pattern id="grain" width="26" height="${H}" patternUnits="userSpaceOnUse"><rect width="3" height="${H}" x="4" fill="#000" opacity="0.16"/><rect width="2" height="${H}" x="15" fill="#ffdcaa" opacity="0.025"/></pattern>
+    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f150c"/><stop offset="1" stop-color="#110b06"/></linearGradient>
+    <radialGradient id="lamp" cx="0.72" cy="0.45" r="0.6"><stop offset="0" stop-color="#e8bb63" stop-opacity="0.16"/><stop offset="1" stop-color="#e8bb63" stop-opacity="0"/></radialGradient>
+    <linearGradient id="b2" gradientUnits="userSpaceOnUse" x1="0" y1="320" x2="0" y2="390"><stop offset="0" stop-color="#f3cd80"/><stop offset="0.6" stop-color="#c9963c"/><stop offset="1" stop-color="#9c7026"/></linearGradient>
   </defs>
   <rect width="${W}" height="${H}" fill="url(#wood)"/>
-  <rect width="${W}" height="${H}" fill="url(#grain)"/>
   <rect width="${W}" height="${H}" fill="url(#lamp)"/>
-  <rect x="24" y="24" width="${W - 48}" height="${H - 48}" fill="none" stroke="#c9963c" stroke-opacity="0.45" stroke-width="2"/>
-  <g transform="translate(${W / 2 - 56} 62) scale(1.75)">${badge()}</g>
+  <image x="${W - PW}" y="${(H - PH) / 2}" width="${PW}" height="${PH}" xlink:href="data:image/png;base64,${painting}" href="data:image/png;base64,${painting}"/>
+  <g transform="translate(66 74) scale(0.95)">${badge()}</g>
+  <path d="${name.d}" fill="#f5ead6"/><path d="${nameR.d}" fill="#e8bb63"/>
   <path d="${kicker.d}" fill="#c9963c"/>
   <path d="${l1.d}" fill="#f5ead6"/>
-  <path d="${l2.d}" fill="url(#b)"/>
-  <path d="${line.d}" fill="#b7a284"/>
+  <path d="${l2.d}" fill="url(#b2)"/>
+  <path d="${line.d}${line2.d}" fill="#b7a284"/>
+  <rect x="72" y="476" width="60" height="1.5" fill="#c9963c" opacity="0.7"/>
   <path d="${phone.d}" fill="#e8bb63"/>
 </svg>`;
-// The gradient on the italic line spans one glyph box per path; give it a tall userSpace version instead.
-const ogFixed = og.replace(
-  `<path d="${l2.d}" fill="url(#b)"/>`,
-  `<linearGradient id="b2" gradientUnits="userSpaceOnUse" x1="0" y1="360" x2="0" y2="440"><stop offset="0" stop-color="#f3cd80"/><stop offset="0.6" stop-color="#c9963c"/><stop offset="1" stop-color="#9c7026"/></linearGradient><path d="${l2.d}" fill="url(#b2)"/>`,
-);
-await sharp(Buffer.from(ogFixed)).png().toFile(join(root, "public", "og-image.png"));
+await sharp(Buffer.from(og)).png().toFile(join(root, "public", "og-image.png"));
 
 console.log(`brand assets -> src/app/icon.svg, src/app/apple-icon.png, public/og-image.png, public/brand (lockup ${LW}×64)`);

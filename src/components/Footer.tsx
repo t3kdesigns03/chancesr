@@ -20,6 +20,9 @@ export default function Footer() {
           <a href={`mailto:${site.cateringEmail}`} className="block break-all hover:text-cream">
             {site.cateringEmail}
           </a>
+          <a href={site.facebook} target="_blank" rel="noopener" className="mt-1 block hover:text-cream">
+            Facebook
+          </a>
         </div>
         <div className="text-tan max-sm:text-sm">
           <p className="label text-brass">Downtown York</p>

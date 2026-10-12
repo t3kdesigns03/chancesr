@@ -10,3 +10,6 @@ next-env.d.ts
 # Local-only: pitch notes and preview config
 chances-r-restaurant-spec-prompt.md
 .claude/
+
+# Mockup source has wrong placeholder text baked in; only the cropped painting ships
+assets-src/

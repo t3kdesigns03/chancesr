@@ -26,18 +26,21 @@ export default function Header() {
       }`}
     >
       {/* Desktop */}
-      <div className="mx-auto hidden h-[4.5rem] max-w-7xl items-center justify-between gap-6 px-8 lg:flex">
+      <div className="mx-auto hidden h-[4.75rem] max-w-7xl items-center justify-between gap-6 px-8 lg:flex">
         <NavLink href="#top" aria-label={`${site.fullName}, back to top`} className="rounded-full">
-          <BrandLockup />
+          <BrandLockup crest />
         </NavLink>
         <nav aria-label="Sections" className="flex items-center gap-1">
           {nav.map((n) => (
-            <NavLink key={n.href} href={n.href} className="rounded-full px-3.5 py-2 text-sm font-semibold text-linen transition-colors hover:text-brass-bright">
+            <NavLink key={n.href} href={n.href} className="label px-3 py-2 text-[0.68rem] text-cream transition-colors hover:text-brass-bright xl:px-4">
               {n.label}
             </NavLink>
           ))}
+          <a href={site.menus.main} target="_blank" rel="noopener" className="label px-3 py-2 text-[0.68rem] text-cream transition-colors hover:text-brass-bright xl:px-4">
+            Menu
+          </a>
         </nav>
-        <a href={site.phone.href} className="brass tap inline-flex min-h-11 items-center gap-2 rounded-full px-5 font-semibold">
+        <a href={site.phone.href} className="brass deco-clip tap inline-flex min-h-11 items-center gap-2 px-5 font-semibold">
           <PhoneIcon className="h-4 w-4" />
           <span className="tabular-nums">{site.phone.display}</span>
         </a>
@@ -49,7 +52,7 @@ export default function Header() {
           <NavLink href="#top" aria-label={`${site.fullName}, back to top`} className="min-w-0 rounded-full py-1 pr-1">
             <BrandLockup compact />
           </NavLink>
-          <a href={site.phone.href} className="brass tap inline-flex min-h-10 shrink-0 items-center gap-2 rounded-full px-4 text-sm font-semibold">
+          <a href={site.phone.href} className="brass deco-clip tap inline-flex min-h-10 shrink-0 items-center gap-2 px-4 text-sm font-semibold">
             <PhoneIcon className="h-4 w-4" />
             Call
           </a>

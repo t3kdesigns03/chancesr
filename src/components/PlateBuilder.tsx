@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
 import { cuts, doneness, MAX_LADLES, quotes, sides, site, type CutId, type SideId } from "@/lib/site";
 import PlateArt, { Steam } from "./PlateArt";
-import { CallButton, Stars } from "./ui";
+import { CallButton } from "./ui";
 
 const buzz = (ms = 10) => {
   if (typeof navigator !== "undefined") navigator.vibrate?.(ms);
@@ -259,43 +259,30 @@ export default function PlateBuilder() {
   );
 
   return (
-    <section id="top" className="tabletop grain relative overflow-hidden pb-12 pt-8 max-lg:pb-8 max-sm:pt-5 lg:pt-6" aria-labelledby="hero-title">
+    <section id="plate" className="tabletop grain relative overflow-hidden border-t border-brass/15 py-20 max-lg:py-12" aria-labelledby="plate-title">
       {/* Lamp glow from above */}
       <div aria-hidden="true" className="flicker pointer-events-none absolute left-1/2 top-[-18rem] h-[36rem] w-[60rem] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(232_187_99/0.18),transparent)]" />
 
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Headline */}
         <div className="text-center">
-          <p className="label text-brass max-sm:text-[0.6rem]">
-            Since {site.founded} <span className="text-brass/50">·</span> Downtown York, Nebraska
+          <p className="label flex items-center justify-center gap-3 text-brass">
+            <span aria-hidden="true" className="h-px w-10 bg-gradient-to-r from-transparent to-brass" />
+            Build your plate
+            <span aria-hidden="true" className="h-px w-10 bg-gradient-to-l from-transparent to-brass" />
           </p>
-          <h1 id="hero-title" className="display mx-auto mt-3 max-w-4xl text-[2.6rem] text-cream sm:text-6xl lg:max-w-6xl lg:text-[4.6rem]">
-            Supper, the way <em className="brass-text pr-1">York remembers&nbsp;it.</em>
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-linen max-sm:mt-3 max-sm:text-base lg:mt-3 lg:max-w-none">
-            Prime rib you can cut with a butter knife.<span className="max-sm:hidden"> Bryan carves, Renee bakes. Build a plate, then come eat it.</span>
-          </p>
-          <p className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-tan max-sm:hidden">
-            <span className="inline-flex items-center gap-1.5">
-              <Stars score={4.3} className="text-brass-bright" />
-              {site.rating.google.score} from {site.rating.google.count} Google reviews
-            </span>
-            <span className="max-sm:hidden" aria-hidden="true">
-              ·
-            </span>
-            <span>
-              #{site.rating.tripadvisor.rank} of {site.rating.tripadvisor.of} in York on TripAdvisor
-            </span>
+          <h2 id="plate-title" className="display mx-auto mt-3 max-w-4xl text-[2.4rem] text-cream sm:text-6xl">
+            Pick it. Plate it. <em className="brass-text pr-1">Then come eat&nbsp;it.</em>
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-linen max-sm:text-[0.95rem]">
+            Your cut, your temp, your sides, as much jus as you like. Then try the butter knife.
           </p>
         </div>
 
         {/* Builder */}
-        <div id="plate" className="mt-8 lg:mt-5 grid items-center gap-6 max-sm:mt-5 lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)_minmax(0,19rem)] xl:gap-10">
-          <h2 className="sr-only">Build your plate</h2>
-
+        <div className="mt-10 grid items-center gap-6 max-sm:mt-6 lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)_minmax(0,19rem)] xl:gap-10">
           {/* Left menu card: 01, 02, knife (desktop) */}
           <div className="flex flex-col gap-4 max-lg:hidden">
-            <p className="label text-center text-brass">Build your plate</p>
             {steps.slice(0, 2).map((s) => (
               <Step key={s.n} n={s.n} title={s.title}>
                 {s.body}

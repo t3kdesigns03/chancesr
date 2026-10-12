@@ -43,7 +43,7 @@ export function CallButton({
   return (
     <a
       href={site.phone.href}
-      className={`brass tap inline-flex items-center justify-center rounded-full font-semibold ${sz} ${className}`}
+      className={`brass deco-clip tap inline-flex items-center justify-center font-semibold ${sz} ${className}`}
     >
       <PhoneIcon className={size === "sm" ? "h-4 w-4" : "h-5 w-5"} />
       {children ?? (
