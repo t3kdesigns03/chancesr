@@ -1,5 +1,5 @@
 import { useId } from "react";
-import type { SideId } from "@/lib/site";
+import type { PotatoId } from "@/lib/site";
 
 /**
  * The plate, drawn top-down on the tabletop. Pure SVG, no photos.
@@ -44,6 +44,35 @@ const MASH = (() => {
   return `M ${pts.join(" L ")} Z`;
 })();
 
+// Deterministic scatter so the drawings never change between renders.
+const rand = (seed: number) => () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+const BAKED_SPECKS: [number, number][] = (() => {
+  const r = rand(11);
+  return Array.from({ length: 22 }, () => [(r() - 0.5) * 108, (r() - 0.5) * 66] as [number, number]).filter(([x, y]) => Math.abs(y) > 12 || Math.abs(x) > 44);
+})();
+const HASH_STRANDS: [number, number, number, string][] = (() => {
+  const r = rand(23);
+  const cols = ["#f0c46e", "#b8782a", "#e6ae52", "#8f5a1e"];
+  return Array.from({ length: 46 }, (_, i) => [(r() - 0.5) * 92, (r() - 0.5) * 72, r() * 180, cols[i % 4]] as [number, number, number, string]);
+})();
+const FRIES: [number, number, number, number][] = (() => {
+  const r = rand(5);
+  return Array.from({ length: 13 }, () => [(r() - 0.5) * 70, (r() - 0.5) * 46, -60 + r() * 120, 44 + r() * 22] as [number, number, number, number]);
+})();
+const PILAF: [number, number, number, string][] = (() => {
+  const r = rand(41);
+  const cols = ["#fbf3dc", "#f5e8c4", "#fffaf0", "#d9c08a"];
+  const pts: [number, number, number, string][] = [];
+  while (pts.length < 150) {
+    const x = (r() - 0.5) * 100;
+    const y = (r() - 0.5) * 78;
+    if ((x / 50) ** 2 + (y / 39) ** 2 < 0.85) pts.push([x, y, r() * 180, cols[pts.length % 4]]);
+  }
+  // a few bits of parsley and carrot
+  for (let i = 0; i < 10; i++) pts.push([(r() - 0.5) * 70, (r() - 0.5) * 50, r() * 180, i % 2 ? "#4f7a2e" : "#e07b2c"]);
+  return pts;
+})();
+
 const BEANS: [number, number, number][] = [
   [-28, -14, -32], [-12, -22, -18], [6, -16, -40], [-30, 4, -24], [-4, 2, -30], [22, -6, -20], [-16, 18, -36],
 ];
@@ -51,18 +80,16 @@ const CARROTS: [number, number][] = [[30, 18], [44, 2], [14, 30], [40, -22], [-3
 const SHROOMS: [number, number, number][] = [[-34, 2, -20], [-12, -8, 15], [8, 4, -35], [28, -6, 25], [-20, 14, 40], [14, 16, -5], [36, 12, 60]];
 
 /**
- * Steam off the hot slice. Its own SVG layered over the plate: animating it inside the plate SVG
+ * Steam off the hot slice: soft HTML puffs over the plate. Animating anything inside the plate SVG
  * would make the browser repaint the noise-textured meat every frame.
  */
 export function Steam() {
   return (
-    <svg viewBox="0 0 600 600" className="pointer-events-none absolute inset-0 h-full w-full blur-[3px]" aria-hidden="true">
-      <g className="steam" fill="none" stroke="#fff" strokeWidth="7" strokeLinecap="round" opacity="0.35">
-        <path d="M 210 250 C 190 220 230 200 210 170 C 194 146 220 128 212 104" />
-        <path d="M 260 245 C 242 214 282 196 262 164 C 248 140 274 124 266 98" />
-        <path d="M 308 255 C 290 226 328 206 310 176 C 296 152 320 136 314 112" />
-      </g>
-    </svg>
+    <div aria-hidden="true" className="steam-puffs left-[30%] top-[14%] h-[30%] w-[26%]">
+      <i />
+      <i />
+      <i />
+    </div>
   );
 }
 
@@ -72,7 +99,8 @@ export default function PlateArt({
   band,
   size,
   juicy,
-  sides,
+  potato,
+  mushrooms,
   ladles,
   isCut,
   pourKey,
@@ -83,7 +111,8 @@ export default function PlateArt({
   band: string;
   size: number;
   juicy: number;
-  sides: Set<SideId>;
+  potato: PotatoId;
+  mushrooms: boolean;
   ladles: number;
   isCut: boolean;
   pourKey: number;
@@ -247,8 +276,69 @@ export default function PlateArt({
         </g>
       </g>
 
-      {/* Sides */}
-      {sides.has("mash") && (
+      {/* The potato (one of the printed menu's six), then the mushrooms */}
+      {potato === "baked" && (
+        <g transform="translate(438 200)">
+          <g className="side-drop">
+            <ellipse cx="6" cy="16" rx="64" ry="42" fill="#5a3a1c" opacity="0.3" filter={`url(#${u("blur4")})`} />
+            <g transform="rotate(-14)">
+              <ellipse rx="62" ry="40" fill="#7a4e26" />
+              <ellipse rx="60" ry="38" fill="none" stroke="#5b3818" strokeWidth="3" />
+              {BAKED_SPECKS.map(([x, y], i) => (
+                <circle key={i} cx={x} cy={y} r="1.6" fill="#4a2c12" opacity="0.7" />
+              ))}
+              <path d="M -40 -2 C -20 -18 22 -18 42 -2 C 24 12 -22 12 -40 -2 Z" fill="#f2e2bb" />
+              <path d="M -30 -2 C -12 -10 14 -10 32 -2" fill="none" stroke="#e2cb96" strokeWidth="3" />
+            </g>
+            <rect x="-10" y="-14" width="20" height="15" rx="3" transform="rotate(10)" fill="#f8da74" stroke="#deb346" />
+            <path d="M 8 -8 C 14 -22 34 -20 34 -8 C 40 -2 30 8 20 4 C 10 8 2 0 8 -8 Z" fill="#fffaf0" />
+            {[[16, -12], [24, -6], [12, -2], [28, -14]].map(([x, y], i) => (
+              <rect key={i} x={x} y={y} width="4" height="1.8" rx="0.9" fill="#4f7a2e" transform={`rotate(${i * 40} ${x} ${y})`} />
+            ))}
+          </g>
+        </g>
+      )}
+      {potato === "hash" && (
+        <g transform="translate(436 198)">
+          <g className="side-drop">
+            <ellipse cx="6" cy="14" rx="62" ry="46" fill="#6e4a22" opacity="0.3" filter={`url(#${u("blur4")})`} />
+            <path d="M -58 4 C -60 -30 -24 -50 8 -48 C 44 -46 62 -20 58 8 C 54 36 22 50 -8 48 C -38 46 -56 30 -58 4 Z" fill="#d49a42" />
+            <path d="M -58 4 C -60 -30 -24 -50 8 -48 C 44 -46 62 -20 58 8 C 54 36 22 50 -8 48 C -38 46 -56 30 -58 4 Z" fill="none" stroke="#a96a24" strokeWidth="4" />
+            {HASH_STRANDS.map(([x, y, r, c], i) => (
+              <path key={i} d={`M ${x} ${y} q 9 -3 18 1`} transform={`rotate(${r} ${x} ${y})`} fill="none" stroke={c} strokeWidth="2.6" strokeLinecap="round" />
+            ))}
+          </g>
+        </g>
+      )}
+      {potato === "fries" && (
+        <g transform="translate(440 196)">
+          <g className="side-drop">
+            <ellipse cx="4" cy="14" rx="66" ry="44" fill="#6e4a22" opacity="0.28" filter={`url(#${u("blur4")})`} />
+            {FRIES.map(([x, y, r, l], i) => (
+              <g key={i} transform={`translate(${x} ${y}) rotate(${r})`}>
+                <rect x={-l / 2} y="-5" width={l} height="10" rx="3" fill="#e9b452" stroke="#c48a2e" strokeWidth="1.2" />
+                <path d={`M ${-l / 2 + 4} -2 L ${l / 2 - 4} -2`} stroke="#f8d98a" strokeWidth="2" strokeLinecap="round" />
+              </g>
+            ))}
+            {[[-20, -6], [14, 10], [30, -16], [-8, 20]].map(([x, y], i) => (
+              <circle key={i} cx={x} cy={y} r="1.5" fill="#fff" opacity="0.8" />
+            ))}
+          </g>
+        </g>
+      )}
+      {potato === "pilaf" && (
+        <g transform="translate(436 198)">
+          <g className="side-drop">
+            <ellipse cx="6" cy="14" rx="60" ry="42" fill="#6e5a32" opacity="0.28" filter={`url(#${u("blur4")})`} />
+            <path d="M -54 6 C -56 -26 -22 -44 6 -42 C 38 -40 58 -18 54 8 C 50 32 20 44 -6 42 C -34 40 -52 28 -54 6 Z" fill="#eadcb8" />
+            {PILAF.map(([x, y, r, c], i) => (
+              <ellipse key={i} cx={x} cy={y} rx="4.2" ry="1.7" transform={`rotate(${r} ${x} ${y})`} fill={c} />
+            ))}
+          </g>
+        </g>
+      )}
+
+      {potato === "mash" && (
         <g transform="translate(436 196)">
           <g className="side-drop">
             <ellipse cx="6" cy="14" rx="62" ry="50" fill="#6e5230" opacity="0.35" filter={`url(#${u("blur4")})`} />
@@ -276,7 +366,7 @@ export default function PlateArt({
         </g>
       )}
 
-      {sides.has("veg") && (
+      {potato === "veg" && (
         <g transform="translate(440 408) scale(1.2)">
           <g className="side-drop">
             <ellipse cx="4" cy="10" rx="62" ry="40" fill="#5a4a2a" opacity="0.25" filter={`url(#${u("blur4")})`} />
@@ -298,7 +388,7 @@ export default function PlateArt({
         </g>
       )}
 
-      {sides.has("shroom") && (
+      {mushrooms && (
         <g transform="translate(292 474) scale(1.1)">
           <g className="side-drop">
             <ellipse cx="0" cy="8" rx="58" ry="24" fill="#4a3018" opacity="0.3" filter={`url(#${u("blur4")})`} />

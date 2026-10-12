@@ -1,15 +1,17 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import MobileMotion from "@/components/MobileMotion";
+import MotionGate from "@/components/MotionGate";
 import { hoursSchema, site } from "@/lib/site";
 import "./globals.css";
 
 // Self-hosted (SIL OFL) so builds never depend on reaching Google Fonts.
-// Fraunces "full" carries every axis (opsz, wght, SOFT, WONK) in one file per style.
+// Fraunces "opsz" files: optical size + weight axes (the display cut at headline sizes) at about half the
+// weight of the all-axes files, which matters on a phone's first load.
 const fraunces = localFont({
   src: [
-    { path: "../fonts/fraunces-latin-full-normal.woff2", weight: "100 900", style: "normal" },
-    { path: "../fonts/fraunces-latin-full-italic.woff2", weight: "100 900", style: "italic" },
+    { path: "../fonts/fraunces-latin-opsz-normal.woff2", weight: "100 900", style: "normal" },
+    { path: "../fonts/fraunces-latin-opsz-italic.woff2", weight: "100 900", style: "italic" },
   ],
   variable: "--font-fraunces",
   display: "swap",
@@ -21,6 +23,32 @@ const hanken = localFont({
   style: "normal",
   variable: "--font-hanken",
   display: "swap",
+});
+
+// The restaurant's own lettering: blackletter "Chances "R"" (UnifrakturMaguntia, close to their printed
+// menu and sign), a copperplate script for "Restaurant & Lounge", and Rye for the menu's ornate headings.
+const blackletter = localFont({
+  src: "../fonts/unifrakturmaguntia-latin-400-normal.woff2",
+  weight: "400",
+  style: "normal",
+  variable: "--font-unifraktur",
+  display: "swap",
+});
+const script = localFont({
+  src: "../fonts/pinyon-script-latin-400-normal.woff2",
+  weight: "400",
+  style: "normal",
+  variable: "--font-pinyon",
+  display: "swap",
+  preload: false,
+});
+const tuscan = localFont({
+  src: "../fonts/rye-latin-400-normal.woff2",
+  weight: "400",
+  style: "normal",
+  variable: "--font-rye",
+  display: "swap",
+  preload: false,
 });
 
 // Server's handwriting on the guest check. Only that one card uses it, so don't preload.
@@ -91,7 +119,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${hanken.variable} ${caveat.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${hanken.variable} ${caveat.variable} ${blackletter.variable} ${script.variable} ${tuscan.variable}`}>
       <body className="font-sans antialiased">
         <a
           href="#main"
@@ -101,6 +129,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </a>
         {children}
         <MobileMotion />
+        <MotionGate />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </body>
     </html>

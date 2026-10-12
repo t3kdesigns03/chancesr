@@ -1,17 +1,18 @@
 import { carryOut, site } from "@/lib/site";
 import { HoursTable, OpenBadge } from "./OpenStatus";
+import { NextBuffet } from "./UpcomingBuffets";
 import { CallButton, Container, MailIcon, PinIcon, Stars } from "./ui";
 
 const numbers = [
-  { big: String(site.founded), small: "Three generations of York suppers" },
+  { big: String(site.founded), small: "Downtown since the Cozy Lunch" },
   { big: site.rating.google.score, small: `From ${site.rating.google.count} Google reviews`, stars: true },
   { big: `#${site.rating.tripadvisor.rank}`, small: `Of ${site.rating.tripadvisor.of} restaurants in York on TripAdvisor (${site.rating.tripadvisor.count} reviews)` },
   { big: String(site.seats), small: "Seats, across the dining rooms" },
 ];
 
-const straight = [
+const straight: { q: string; a: React.ReactNode }[] = [
   { q: "Fancy?", a: "No. Antiques on the walls, prime rib on the plate, no pretense." },
-  { q: "Buffet tonight?", a: "The prime rib buffet and Sunday brunch dates rotate. Call before you drive." },
+  { q: "Buffet tonight?", a: <NextBuffet /> },
   { q: "Coming off I-80?", a: "Your GPS will send you downtown. Trust it." },
   { q: "Is it 5 stars?", a: `It's ${site.rating.google.score}. Busy Sundays mean a line. We think the prime rib is worth it.` },
 ];
@@ -67,7 +68,7 @@ export function Visit() {
             Save us <em className="brass-text">a table.</em>
           </h2>
           <p data-reveal="" className="mt-4 max-w-md text-lg text-linen max-sm:text-base">
-            Anniversary, after church, or just passing through on I-80. Call and we&rsquo;ll hold a seat.
+            Anniversary, after church, or just passing through on <span className="whitespace-nowrap">I-80</span>. Call and we&rsquo;ll hold a seat.
           </p>
           <div data-reveal="" className="mt-7 flex flex-col items-start gap-4 max-sm:mt-5">
             <CallButton size="lg" />
@@ -91,7 +92,7 @@ export function Visit() {
               <span className="min-w-0">
                 <span className="label block text-brass">Banquets & catering</span>
                 <span className="mt-1 block break-all text-cream group-hover:text-brass-bright">{site.cateringEmail}</span>
-                <span className="block text-sm text-linen">West Room, East Room, or your place.</span>
+                <span className="block text-sm text-linen">Shir-Ra Room, Tommy-Suz Beer Garden, or your place.</span>
               </span>
             </a>
           </div>
@@ -107,7 +108,9 @@ export function Visit() {
             <p className="mt-1 tabular-nums text-cream">{carryOut.time}</p>
             <p className="mt-1 text-xs text-tan">{carryOut.fine}</p>
           </div>
-          <p className="mt-4 text-sm text-tan">Prime rib buffet weekends and Sunday brunch rotate. Call {site.phone.display} for the next one.</p>
+          <p className="mt-4 text-sm text-tan">
+            <NextBuffet />
+          </p>
         </div>
       </Container>
     </section>

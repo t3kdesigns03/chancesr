@@ -13,3 +13,6 @@ chances-r-restaurant-spec-prompt.md
 
 # Mockup source has wrong placeholder text baked in; only the cropped painting ships
 assets-src/
+
+# Their printed menu PDF (source for src/lib/menu.ts); large and already on their site
+*.pdf

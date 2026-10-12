@@ -25,6 +25,8 @@ const loadFont = (rel: string) => {
 const serif = loadFont("@fontsource/fraunces/files/fraunces-latin-400-normal.woff");
 const serifItalic = loadFont("@fontsource/fraunces/files/fraunces-latin-600-italic.woff");
 const sans = loadFont("@fontsource/hanken-grotesk/files/hanken-grotesk-latin-700-normal.woff");
+// The restaurant's own lettering: blackletter, like the printed menu and the sign.
+const black = loadFont("@fontsource/unifrakturmaguntia/files/unifrakturmaguntia-latin-400-normal.woff");
 
 // opentype's own toPathData() emits malformed data for some glyphs (e.g. a second "m"), and librsvg
 // stops drawing the whole path at the first bad token. Serialize the commands ourselves.
@@ -61,7 +63,7 @@ const FACE = `<radialGradient id="f" cx="0.5" cy="0.35" r="0.7"><stop offset="0"
 
 /** The badge in a 64×64 box, same layout as BrandMark.tsx. */
 function badge(withYear = true) {
-  const r = outline(serifItalic, "R", 32.5, 40, 30, 0, 0.5);
+  const r = outline(black, "R", 32, 41, 31, 0, 0.5);
   const lq = outline(serif, "“", 17.5, 27, 14, 0, 0.5);
   const rq = outline(serif, "”", 47, 27, 14, 0, 0.5);
   const yr = outline(sans, "1932", 32, 51.5, 5.4, 1.6, 0.5);
@@ -79,13 +81,13 @@ const apple = `<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" 
 await sharp(Buffer.from(apple)).png().toFile(join(root, "src", "app", "apple-icon.png"));
 
 // ---- Lockup ------------------------------------------------------------------
-const word = outline(serif, "Chances", 76, 34, 30);
-const wordR = outline(serifItalic, "“R”", 76 + word.width + 8, 34, 30);
+const word = outline(black, "Chances", 76, 35, 33);
+const wordR = outline(black, "“R”", 76 + word.width + 8, 35, 33);
 const sub = outline(sans, "RESTAURANT & LOUNGE · YORK", 77, 52, 8.6, 2.6);
 const LW = Math.ceil(Math.max(76 + word.width + 8 + wordR.width, 77 + sub.width) + 4);
 const lockup = `<svg xmlns="http://www.w3.org/2000/svg" width="${LW * 4}" height="${64 * 4}" viewBox="0 0 ${LW} 64">
   <defs>${BRASS}${FACE}</defs>${badge()}
-  <path d="${word.d}" fill="#f5ead6"/><path d="${wordR.d}" fill="#e8bb63"/><path d="${sub.d}" fill="#b7a284"/>
+  <path d="${word.d}" fill="#f5ead6"/><path d="${wordR.d}" fill="#d0384e"/><path d="${sub.d}" fill="#b7a284"/>
 </svg>`;
 writeFileSync(join(brandDir, "chancesr-lockup.svg"), lockup);
 await sharp(Buffer.from(lockup)).png().toFile(join(brandDir, "chancesr-lockup.png"));
@@ -126,8 +128,8 @@ const l2 = outline(serifItalic, "York remembers it.", 70, 364, 58, -1.1);
 const line = outline(sans, "PRIME RIB YOU CAN CUT", 72, 424, 13, 3.4);
 const line2 = outline(sans, "WITH A BUTTER KNIFE", 72, 446, 13, 3.4);
 const phone = outline(sans, "(402) 362-7755", 72, 524, 28, 1.2);
-const name = outline(serif, "Chances", 136, 122, 30);
-const nameR = outline(serifItalic, "“R”", 136 + name.width + 8, 122, 30);
+const name = outline(black, "Chances", 136, 124, 36);
+const nameR = outline(black, "“R”", 136 + name.width + 8, 124, 36);
 const og = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <defs>${BRASS}${FACE}
     <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f150c"/><stop offset="1" stop-color="#110b06"/></linearGradient>
@@ -138,7 +140,7 @@ const og = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.o
   <rect width="${W}" height="${H}" fill="url(#lamp)"/>
   <image x="${W - PW}" y="${(H - PH) / 2}" width="${PW}" height="${PH}" xlink:href="data:image/png;base64,${painting}" href="data:image/png;base64,${painting}"/>
   <g transform="translate(66 74) scale(0.95)">${badge()}</g>
-  <path d="${name.d}" fill="#f5ead6"/><path d="${nameR.d}" fill="#e8bb63"/>
+  <path d="${name.d}" fill="#f5ead6"/><path d="${nameR.d}" fill="#d0384e"/>
   <path d="${kicker.d}" fill="#c9963c"/>
   <path d="${l1.d}" fill="#f5ead6"/>
   <path d="${l2.d}" fill="url(#b2)"/>

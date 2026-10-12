@@ -17,7 +17,7 @@ function BadgeArt({ id }: { id: string }) {
       </defs>
       <circle cx="32" cy="32" r="30.5" fill={`url(#${id}-f)`} stroke={`url(#${id}-b)`} strokeWidth="2.2" />
       <circle cx="32" cy="32" r="26.4" fill="none" stroke="#c9963c" strokeOpacity="0.45" strokeWidth="0.7" />
-      <text x="32.5" y="40" textAnchor="middle" fontFamily="var(--font-fraunces), Georgia, serif" fontStyle="italic" fontWeight="600" fontSize="30" fill={`url(#${id}-b)`}>
+      <text x="32" y="41" textAnchor="middle" fontFamily="var(--font-blackletter), serif" fontSize="31" fill={`url(#${id}-b)`}>
         R
       </text>
       <text x="17.5" y="27" textAnchor="middle" fontFamily="var(--font-fraunces), Georgia, serif" fontWeight="600" fontSize="14" fill="#c9963c">
@@ -77,13 +77,13 @@ export function BrandLockup({ className = "", compact = false, crest = false }: 
   return (
     <span className={`flex min-w-0 items-center gap-2.5 ${className}`}>
       {crest ? (
-        <DecoCrest className="-my-1 h-[3.9rem] w-auto shrink-0" />
+        <DecoCrest className={`-my-1 w-auto shrink-0 ${compact ? "h-[3.3rem]" : "h-[3.9rem]"}`} />
       ) : (
         <BrandMark className={compact ? "h-10 w-10 shrink-0" : "h-12 w-12 shrink-0"} />
       )}
       <span className="min-w-0 leading-none">
-        <span className={`display block whitespace-nowrap text-cream ${compact ? "text-[1.35rem]" : "text-[1.6rem]"}`}>
-          Chances <span className="italic text-brass-bright">&ldquo;R&rdquo;</span>
+        <span className={`font-blackletter block whitespace-nowrap leading-none text-cream ${compact ? "text-[1.6rem]" : "text-[1.9rem]"}`}>
+          Chances <span className="text-red-bright">&ldquo;R&rdquo;</span>
         </span>
         <span className={`label mt-1 block truncate text-tan ${compact ? "text-[0.52rem] tracking-[0.2em]" : "text-[0.58rem]"}`}>
           Restaurant &amp; Lounge{compact ? "" : " · York"}

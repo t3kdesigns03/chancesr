@@ -1,56 +1,44 @@
+import { preload } from "react-dom";
 import { site } from "@/lib/site";
 import NavLink from "./NavLink";
 import { OpenText } from "./OpenStatus";
 import { CallButton, PinIcon, Stars } from "./ui";
 
-// Lamp glints floating in the dark behind the copy, like the bokeh in the painting.
-const LIGHTS = [
-  { l: "1%", t: "6%", s: 110, o: 0.22 },
-  { l: "30%", t: "4%", s: 50, o: 0.3 },
-  { l: "36%", t: "90%", s: 90, o: 0.16 },
-  { l: "-2%", t: "70%", s: 140, o: 0.12 },
-];
+const HERO_SRCSET = "/images/hero-plate-900.webp 900w, /images/hero-plate-1200.webp 1200w, /images/hero-plate-1600.webp 1600w";
+const HERO_SIZES = "(min-width: 1024px) 60vw, 100vw";
 
 /**
  * Header hero: the painted prime-rib plate. Desktop runs it off the right edge with the copy on the
  * left; phones lead with it full-bleed and lift the headline up onto its faded bottom edge.
  */
 export default function Hero() {
+  // Start the painting downloading from the <head>, before the fonts and scripts compete for the connection.
+  preload("/images/hero-plate-900.webp", { as: "image", fetchPriority: "high", imageSrcSet: HERO_SRCSET, imageSizes: HERO_SIZES });
   return (
     <section id="top" aria-labelledby="hero-title" className="grain relative isolate overflow-hidden bg-walnut-900">
       {/* Warm room behind everything */}
       <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_60%_at_70%_45%,rgb(201_150_60/0.16),transparent_70%),linear-gradient(180deg,#1c140c,#120c07)]" />
-      {LIGHTS.map((b, i) => (
-        <span
-          key={i}
-          aria-hidden="true"
-          className="flicker pointer-events-none absolute -z-10 rounded-full bg-[radial-gradient(closest-side,#ffc56a,transparent)] blur-md max-lg:hidden"
-          style={{ left: b.l, top: b.t, width: b.s, height: b.s, opacity: b.o, animationDelay: `${i * 0.8}s` }}
-        />
-      ))}
 
       {/* The painting */}
       <div className="relative lg:absolute lg:right-0 lg:top-1/2 lg:aspect-[11/8.2] lg:w-[60%] lg:max-w-[64rem] lg:-translate-y-1/2 xl:w-[58%]">
         <div className="hero-art relative h-full max-lg:aspect-[11/8.2] max-lg:max-h-[30rem] max-lg:w-full">
-          <picture>
-            <source media="(min-width: 1024px)" srcSet="/images/hero-plate-1600.webp" />
-            <img
-              src="/images/hero-plate-900.webp"
-              alt="Painting of a slice of prime rib on a dark plate with mashed potatoes, roasted carrots and au jus"
-              width={900}
-              height={687}
-              fetchPriority="high"
-              className="hero-zoom h-full w-full object-cover object-[50%_45%]"
-            />
-          </picture>
+          {/* eslint-disable-next-line @next/next/no-img-element -- static export; sizes pre-cut by scripts/build-hero.mjs */}
+          <img
+            src="/images/hero-plate-900.webp"
+            srcSet={HERO_SRCSET}
+            sizes={HERO_SIZES}
+            alt="Painting of a slice of prime rib on a dark plate with mashed potatoes, roasted carrots and au jus"
+            width={900}
+            height={687}
+            fetchPriority="high"
+            className="hero-zoom h-full w-full object-cover object-[50%_45%]"
+          />
           {/* Steam off the slice */}
-          <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="pointer-events-none absolute left-[30%] top-[6%] h-[42%] w-[30%] blur-[4px] lg:left-[26%] lg:top-[12%]" aria-hidden="true">
-            <g className="steam" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" opacity="0.28">
-              <path d="M 30 95 C 18 70 42 58 30 36 C 22 20 36 10 32 0" />
-              <path d="M 55 98 C 44 74 66 60 55 38 C 47 22 62 12 58 2" />
-              <path d="M 78 95 C 68 72 88 60 78 40 C 70 26 84 14 80 4" />
-            </g>
-          </svg>
+          <div aria-hidden="true" className="steam-puffs left-[34%] top-[8%] h-[34%] w-[22%] lg:left-[32%] lg:top-[10%]">
+            <i />
+            <i />
+            <i />
+          </div>
         </div>
         {/* Deco frame corners, drawn in brass over the painting */}
         <DecoCorners className="pointer-events-none absolute inset-y-[4%] left-[14%] right-[6%] max-lg:hidden" />
@@ -64,12 +52,12 @@ export default function Hero() {
           <h1 id="hero-title" className="display mt-4 text-[2.4rem] text-cream min-[400px]:text-[2.7rem] drop-shadow-[0_4px_24px_rgb(0_0_0/0.6)] sm:text-6xl lg:text-[4.6rem] xl:text-[5rem]">
             Supper, the way <em className="brass-text pr-1">York remembers&nbsp;it.</em>
           </h1>
-          <p className="display mt-5 text-[1.35rem] leading-snug text-linen max-sm:mt-4 max-sm:text-lg">
-            Prime rib you can cut with a butter knife. Pan-fried chicken. The Hobnob Lounge. Downtown since {site.founded}.
+          <p className="display mt-5 text-balance text-[1.35rem] leading-snug text-linen max-sm:mt-4 max-sm:text-lg lg:max-w-[33rem]">
+            Prime rib you can cut with a butter knife. Pan-fried chicken. The Hob-Nob Lounge. Downtown since {site.founded}.
           </p>
-          <p className="mt-4 text-[1.02rem] leading-relaxed text-tan max-lg:hidden">
-            Family-run, three generations on. After-church brunch, service-club lunches, prime-rib anniversaries, and the
-            I-80 travelers whose GPS sends them downtown. Bryan carves. Renee bakes.
+          <p className="mt-4 text-[1.02rem] leading-relaxed text-tan max-lg:hidden lg:max-w-[30rem]">
+            Three generations of one family, and since 2021, Bryan &amp; Renee Jantz. After-church brunch, service-club
+            lunches, prime-rib anniversaries, and the <span className="whitespace-nowrap">I-80</span> travelers whose GPS sends them downtown.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3 max-lg:justify-center max-sm:mt-6 max-sm:flex-col max-sm:items-stretch">

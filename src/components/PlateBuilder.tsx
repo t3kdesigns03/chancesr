@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
-import { cuts, doneness, MAX_LADLES, quotes, sides, site, type CutId, type SideId } from "@/lib/site";
+import { cuts, doneness, MAX_LADLES, mushrooms, potatoes, quotes, site, type CutId, type PotatoId } from "@/lib/site";
 import PlateArt, { Steam } from "./PlateArt";
+import { NextBuffet } from "./UpcomingBuffets";
 import { CallButton } from "./ui";
 
 const buzz = (ms = 10) => {
@@ -17,9 +18,10 @@ const LADLE_LINES = ["Dry plate. Your call.", "One ladle. Just right.", "Two. No
  * plate first, then one step at a time behind numbered tabs, to keep scrolling short.
  */
 export default function PlateBuilder() {
-  const [cut, setCut] = useState<CutId>("house");
+  const [cut, setCut] = useState<CutId>("regular");
   const [done, setDone] = useState(1);
-  const [picked, setPicked] = useState<Set<SideId>>(() => new Set<SideId>(["mash"]));
+  const [potato, setPotato] = useState<PotatoId>("mash");
+  const [shrooms, setShrooms] = useState(true);
   const [ladles, setLadles] = useState(1);
   const [isCut, setIsCut] = useState(false);
   const [pourKey, setPourKey] = useState(0);
@@ -32,15 +34,6 @@ export default function PlateBuilder() {
   const c = cuts.find((x) => x.id === cut)!;
   const d = doneness[done];
 
-  function toggleSide(id: SideId) {
-    buzz();
-    setPicked((s) => {
-      const n = new Set(s);
-      if (n.has(id)) n.delete(id);
-      else n.add(id);
-      return n;
-    });
-  }
 
   function ladle() {
     if (ladles >= MAX_LADLES) return;
@@ -75,7 +68,8 @@ export default function PlateBuilder() {
     }
   }
 
-  const ticketSides = sides.filter((s) => picked.has(s.id)).map((s) => s.ticket);
+  const p = potatoes.find((x) => x.id === potato)!;
+  const ticketSides = [p.ticket, ...(shrooms ? ["mushrooms"] : [])];
   const jusLine = ladles === 0 ? "no jus" : ladles === 1 ? "au jus" : `au jus ×${ladles}`;
 
   const steps: { n: string; title: string; tab: string; body: ReactNode }[] = [
@@ -84,7 +78,7 @@ export default function PlateBuilder() {
       title: "The cut",
       tab: "Cut",
       body: (
-        <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Cut size">
+        <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Cut">
           {cuts.map((x) => {
             const on = x.id === cut;
             return (
@@ -101,11 +95,11 @@ export default function PlateBuilder() {
                 }`}
               >
                 <span className="display block text-xl">{x.name}</span>
-                <span className="label mt-1 block text-[0.6rem] text-brass-bright">{x.oz} oz</span>
+                <span className="label mt-1 block text-[0.6rem] text-brass-bright">Cut</span>
               </button>
             );
           })}
-          <p key={c.id} className="panel-in col-span-3 mt-1 text-sm text-tan">
+          <p key={c.id} className="panel-in col-span-2 mt-1 text-sm text-tan">
             {c.line}
           </p>
         </div>
@@ -151,36 +145,54 @@ export default function PlateBuilder() {
     },
     {
       n: "03",
-      title: "Sides",
-      tab: "Sides",
+      title: "Potato & mushrooms",
+      tab: "Potato",
       body: (
-        <div className="flex flex-col gap-2">
-          {sides.map((s) => {
-            const on = picked.has(s.id);
-            return (
-              <button
-                key={s.id}
-                aria-pressed={on}
-                onClick={() => toggleSide(s.id)}
-                className={`tap flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-colors ${
-                  on ? "border-brass bg-brass/15" : "border-white/10 hover:border-brass/50"
-                }`}
-              >
-                <span
-                  aria-hidden="true"
-                  className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border text-[0.7rem] font-bold transition-colors ${
-                    on ? "border-brass bg-brass text-walnut-950" : "border-tan/50 text-transparent"
+        <div>
+          <div className="grid grid-cols-2 gap-1.5" role="radiogroup" aria-label="Choice of potato">
+            {potatoes.map((x) => {
+              const on = x.id === potato;
+              return (
+                <button
+                  key={x.id}
+                  role="radio"
+                  aria-checked={on}
+                  onClick={() => {
+                    buzz();
+                    setPotato(x.id);
+                  }}
+                  className={`tap rounded-lg border px-2.5 py-2 text-left text-[0.82rem] font-semibold leading-tight transition-colors ${
+                    on ? "border-brass bg-brass/15 text-cream" : "border-white/10 text-linen hover:border-brass/50"
                   }`}
                 >
-                  ✓
-                </span>
-                <span className="min-w-0">
-                  <span className={`block font-semibold leading-tight ${on ? "text-cream" : "text-linen"}`}>{s.name}</span>
-                  <span className="block text-xs text-tan">{s.line}</span>
-                </span>
-              </button>
-            );
-          })}
+                  {x.name}
+                </button>
+              );
+            })}
+          </div>
+          <button
+            aria-pressed={shrooms}
+            onClick={() => {
+              buzz();
+              setShrooms((v) => !v);
+            }}
+            className={`tap mt-2 flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-colors ${
+              shrooms ? "border-brass bg-brass/15" : "border-white/10 hover:border-brass/50"
+            }`}
+          >
+            <span
+              aria-hidden="true"
+              className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border text-[0.7rem] font-bold transition-colors ${
+                shrooms ? "border-brass bg-brass text-walnut-950" : "border-tan/50 text-transparent"
+              }`}
+            >
+              ✓
+            </span>
+            <span className="min-w-0">
+              <span className={`block font-semibold leading-tight ${shrooms ? "text-cream" : "text-linen"}`}>{mushrooms.name}</span>
+              <span className="block text-xs text-tan">{mushrooms.line}</span>
+            </span>
+          </button>
         </div>
       ),
     },
@@ -244,17 +256,19 @@ export default function PlateBuilder() {
   const ticket = (
     <GuestCheck>
       <li key={`c-${cut}`} className="ticket-line">
-        1 · Prime rib, {c.name.toLowerCase()} {c.oz} oz
+        1 · Prime rib, {c.name.toLowerCase()} cut
       </li>
       <li key={`d-${done}`} className="ticket-line pl-6">
         {d.name.toLowerCase()}
       </li>
       <li key={`s-${ticketSides.join()}`} className="ticket-line pl-6">
-        {ticketSides.length ? `w/ ${ticketSides.join(", ")}` : "no sides. bold."}
+        w/ {ticketSides.join(" & ")}
       </li>
       <li key={`j-${ladles}`} className="ticket-line pl-6">
         {jusLine}
       </li>
+      {/* Every dinner on the printed menu comes with these */}
+      <li className="pl-6 text-[#2b2117]/70">+ soup or greens, rolls</li>
     </GuestCheck>
   );
 
@@ -274,13 +288,13 @@ export default function PlateBuilder() {
           <h2 id="plate-title" className="display mx-auto mt-3 max-w-4xl text-[2.4rem] text-cream sm:text-6xl">
             Pick it. Plate it. <em className="brass-text pr-1">Then come eat&nbsp;it.</em>
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-linen max-sm:text-[0.95rem]">
-            Your cut, your temp, your sides, as much jus as you like. Then try the butter knife.
+          <p className="mx-auto mt-3 max-w-xl text-balance text-linen max-sm:text-[0.95rem]">
+            Regular or Husker cut, your temp, your potato, as much jus as you like. Then try the butter knife.
           </p>
         </div>
 
         {/* Builder */}
-        <div className="mt-10 grid items-center gap-6 max-sm:mt-6 lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)_minmax(0,19rem)] xl:gap-10">
+        <div className="mt-10 grid items-center gap-6 max-sm:mt-6 lg:items-start lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)_minmax(0,19rem)] xl:gap-10">
           {/* Left menu card: 01, 02, knife (desktop) */}
           <div className="flex flex-col gap-4 max-lg:hidden">
             {steps.slice(0, 2).map((s) => (
@@ -292,14 +306,15 @@ export default function PlateBuilder() {
           </div>
 
           {/* The plate */}
-          <div className="relative mx-auto w-full max-w-[34rem] max-lg:max-w-[28rem]">
+          <div className="relative mx-auto w-full max-w-[34rem] max-lg:max-w-[28rem] lg:self-center">
             <PlateArt
               scale={c.scale}
               center={d.center}
               band={d.band}
               size={d.size}
               juicy={0.24 - done * 0.045}
-              sides={picked}
+              potato={potato}
+              mushrooms={shrooms}
               ladles={ladles}
               isCut={isCut}
               pourKey={pourKey}
@@ -319,14 +334,14 @@ export default function PlateBuilder() {
             {/* The butter-knife line, woven into the cut */}
             <div className="pointer-events-none absolute inset-x-0 bottom-[-0.5rem] flex justify-center max-sm:bottom-[-1rem]">
               {isCut ? (
-                <figure key="q" className="panel-in max-w-sm rounded-2xl border border-brass/30 bg-walnut-950/85 px-4 py-2.5 text-center backdrop-blur-sm">
+                <figure key="q" className="panel-in max-w-sm rounded-2xl border border-brass/30 bg-walnut-950/90 px-4 py-2.5 text-center">
                   <blockquote className="display text-lg italic leading-snug text-cream max-sm:text-base">
                     &ldquo;{quotes.butterKnife}&rdquo;
                   </blockquote>
                   <figcaption className="label mt-1 text-[0.55rem] text-brass">Google review</figcaption>
                 </figure>
               ) : (
-                <p key="h" className="panel-in label rounded-full bg-walnut-950/70 px-3 py-1.5 text-[0.6rem] text-brass-bright backdrop-blur-sm">
+                <p key="h" className="panel-in label rounded-full bg-walnut-950/85 px-3 py-1.5 text-[0.6rem] text-brass-bright">
                   Swipe across the slice<span className="max-sm:hidden">. Butter knife only</span>.
                 </p>
               )}
@@ -380,7 +395,7 @@ export default function PlateBuilder() {
               {steps[tab].body}
             </div>
             <p className="mt-3 truncate text-center font-hand text-xl text-linen">
-              {c.name} {c.oz} oz · {d.short.toLowerCase()} · {ticketSides.length ? ticketSides.join(", ") : "no sides"} · {jusLine}
+              {c.name} cut · {d.short.toLowerCase()} · {ticketSides.join(" & ")} · {jusLine}
             </p>
           </div>
         </div>
@@ -388,7 +403,7 @@ export default function PlateBuilder() {
         <div className="mt-8 flex flex-col items-center gap-2 text-center max-lg:mt-4">
           <CallButton size="lg" />
           <p className="text-sm text-tan">
-            Prime rib buffet weekends &amp; Sunday brunch rotate. Ask for the next one when you call.
+            <NextBuffet />
           </p>
         </div>
       </div>

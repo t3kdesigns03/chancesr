@@ -10,7 +10,7 @@ export function OpenBadge({ className = "" }: { className?: string }) {
   if (!s) return <span className={`inline-block h-7 ${className}`} />;
   return (
     <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm font-semibold ${s.open ? "border-go/40 text-go" : "border-tan/30 text-tan"} ${className}`}>
-      <span className={`h-2 w-2 rounded-full ${s.open ? "pulse-dot bg-go" : "bg-tan/60"}`} />
+      <span className={`h-2 w-2 rounded-full ${s.open ? "pulse-dot bg-go text-go" : "bg-tan/60"}`} />
       {s.text}
     </span>
   );
@@ -22,7 +22,7 @@ export function OpenText() {
   if (!s) return <span className="inline-block h-3 w-28" />;
   return (
     <>
-      <span className={`h-1.5 w-1.5 rounded-full ${s.open ? "pulse-dot bg-go" : "bg-tan/60"}`} />
+      <span className={`h-1.5 w-1.5 rounded-full ${s.open ? "pulse-dot bg-go text-go" : "bg-tan/60"}`} />
       <span className={s.open ? "text-go" : ""}>{s.text}</span>
     </>
   );

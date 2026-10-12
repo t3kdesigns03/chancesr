@@ -13,6 +13,9 @@ npm run build   # static site in ./out (Netlify publishes this)
 - `src/lib/site.ts`: every business fact (address, phone, hours, ratings, review quotes, upcoming buffet dates, menu
   PDF links) plus the Build Your Plate options (cuts, doneness colors, sides). Edit copy here. Past buffet dates hide
   themselves; when the list runs dry the site says "call for the next one".
+- `src/lib/menu.ts`: the full menu (lunch & dinner, breakfast, Hob-Nob Lounge, to-go, brunch), transcribed exactly
+  from their printed PDFs (May/June 2026). `/menu` (`src/app/menu/page.tsx` + `src/components/MenuBoard.tsx`) shows it on
+  cream "menu paper" with their red, the blackletter wordmark and Rye headings. Update prices here when the menu changes.
 - `src/components/Hero.tsx`: the header hero, built around the painted prime-rib plate. Desktop runs the painting off
   the right edge with the copy on the left; phones lead with it full-bleed and lift the headline onto its faded edge.
 - `src/components/PlateBuilder.tsx`: the "Build Your Plate" section right under the hero. Desktop puts the plate
@@ -22,14 +25,18 @@ npm run build   # static site in ./out (Netlify publishes this)
   overlay SVG on purpose (animating it inside the plate would repaint the noise-textured meat every frame).
 - `src/components/Story.tsx` (01, with the matchbook), `Food.tsx` (02, with "R" Buffets dates and menu links),
   `Rooms.tsx` (03, with the dining room illustration), `Visit.tsx` (trust block + hours/visit).
-- The hero painting is the only raster image. `npm run hero` cuts it from the approved mockup
+- Photos: `npm run photos` grades the restaurant's own photos (scraped from chancesryork.com into gitignored
+  `assets-src/scrape/photos`) with one warm low-light treatment, cuts close-ups from the painting, and sizes the menu
+  cover. Output in `public/images/photos`; `src/components/Photo.tsx` serves them.
+- The hero painting `npm run hero` cuts it from the approved mockup
   (`assets-src/hero-mockup.webp`, gitignored because the mockup has placeholder text baked in, like "Omaha").
   Everything else is drawn in code.
 
 ## Brand assets
 
 ```bash
-npm run hero    # painting -> public/images/hero-plate-{1600,900}.webp (+ a copy for the share card)
+npm run hero    # painting -> public/images/hero-plate-{1600,1200,900}.webp (+ a copy for the share card)
+npm run photos  # their photos + painting close-ups + menu cover -> public/images/photos
 npm run brand   # favicon, share card, lockups (run hero first)
 ```
 
@@ -49,9 +56,9 @@ food and room cards. Motion respects `prefers-reduced-motion`.
 1. **Flip `site.spec` to `false`** in `src/lib/site.ts`. That one switch drops the `noindex, nofollow` robots tag and
    removes the "Proposed site by T3KDesigns" footer credit.
 2. **Re-check numbers** in `site.rating` against Google and TripAdvisor (Oct 2026: 4.3 from 320+, #1 of 33 with 440+).
-3. **Confirm with Bryan & Renee:** the cut names/sizes in the plate builder (Petite 8 / House 12 / Hungry 16 oz),
-   Hobnob happy hour times, and upcoming buffet dates (`buffets` in site.ts, from their "R" Buffets page, Oct 2026).
-4. **Menus** link to the PDFs on their current Squarespace site (`site.menus`). Copy them over before that site goes away.
+3. **Confirm with Bryan & Renee:** upcoming buffet dates (`buffets` in site.ts, from their "R" Buffets page, Oct 2026)
+   and that `src/lib/menu.ts` still matches the printed menu.
+4. **Printable PDFs** still link to their current Squarespace site (`site.menus`). Copy them over before that site goes away.
 5. **Web address:** point their own address at the Netlify site and set `SITE_URL` (or let Netlify's `URL` do it).
 
 ## Deploying

@@ -48,7 +48,7 @@ export function CallButton({
       <PhoneIcon className={size === "sm" ? "h-4 w-4" : "h-5 w-5"} />
       {children ?? (
         <span>
-          Call <span className="tabular-nums">{site.phone.display}</span> for a table
+          Call <span className="whitespace-nowrap tabular-nums">{site.phone.display}</span> for a table
         </span>
       )}
     </a>

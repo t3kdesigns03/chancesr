@@ -3,6 +3,7 @@
 // git because it has placeholder text baked in, like "Omaha")
 //
 //   public/images/hero-plate-1600.webp   desktop
+//   public/images/hero-plate-1200.webp   high-density phones
 //   public/images/hero-plate-900.webp    phones
 //   assets-src/hero-plate-og.png         used by scripts/build-brand.mts for the share card
 
@@ -22,7 +23,7 @@ const k = srcW / 2000;
 const crop = { left: Math.round(900 * k), top: Math.round(222 * k), width: Math.round(1100 * k), height: Math.round(840 * k) };
 const base = sharp(src).extract(crop);
 
-for (const w of [1600, 900]) {
+for (const w of [1600, 1200, 900]) {
   await base
     .clone()
     .resize({ width: w, kernel: "lanczos3" })

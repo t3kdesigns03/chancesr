@@ -1,11 +1,13 @@
 // Single source of truth for business details. Every fact here comes from the restaurant's
-// own site (chancesryork.com), its Google and TripAdvisor listings, or public reviews. Nothing invented.
+// own site (chancesryork.com: Our Story, The Experience, Events & Catering, "R" Buffets; scraped Oct 2026),
+// its Google and TripAdvisor listings, or public reviews. Nothing invented.
 
 export const site = {
   name: 'Chances "R"',
   fullName: 'Chances "R" Restaurant & Lounge',
   founded: 1932,
-  founders: { him: "Raymond", her: "Shirley" },
+  founders: { him: "Raymond", her: "Shirley", family: "Reetz" },
+  named: 1964,
   hosts: "Bryan & Renee Jantz",
   hostsShort: "Bryan & Renee",
   seats: 550,
@@ -48,7 +50,7 @@ export const hours: { label: string; days: number[]; time: string; open: number;
   { label: "Mon – Tue", days: [1, 2], time: "11am – 9pm", open: 11, close: 21 },
   { label: "Wed – Fri", days: [3, 4, 5], time: "7am – 9pm", open: 7, close: 21 },
   { label: "Saturday", days: [6], time: "8am – 9pm", open: 8, close: 21 },
-  { label: "Sunday", days: [0], time: "8am – 3pm", open: 8, close: 15, note: "Brunch" },
+  { label: "Sunday", days: [0], time: "8am – 3pm", open: 8, close: 15 },
 ];
 
 export const hoursSchema = ["Mo-Tu 11:00-21:00", "We-Fr 07:00-21:00", "Sa 08:00-21:00", "Su 08:00-15:00"];
@@ -60,6 +62,7 @@ export const carryOut = {
 };
 
 // From the "R" Buffets page, Oct 2026. Past dates hide themselves (see UpcomingBuffets).
+// Their Experience page: "Due to staff shortages these buffets are currently available once a month."
 // Leave this list empty and the site just says "call for the next one".
 export const buffets: { date: string; label: string; time: string }[] = [
   { date: "2026-11-26", label: "Thanksgiving Brunch", time: "10am – 2pm" },
@@ -78,6 +81,45 @@ export const quotes = {
   chicken: "I usually order the fried chicken — all white meat — or the prime rib.",
 };
 
+// From "Our Story" on their site.
+export const history = [
+  { year: "1932", text: "Hiney Neufeld opens the Cozy Lunch, a “modern hamburger shop.”" },
+  { year: "1937", text: "Roy & Thelma “Mimi” Schultz, Shirley’s parents, take it over." },
+  { year: "1957", text: "Raymond & Shirley Reetz buy the Cozy Lunch. It seats 50." },
+  { year: "1964", text: "They expand to 180 seats, open the Shir-Ra Room, start catering, and rename it Chances “R”." },
+  { year: "1983", text: "The Hob-Nob Lounge and Tommy-Suz Beer Garden open: mahogany, stained glass, brass. 550 seats." },
+  { year: "1994", text: "Raymond & Shirley are named Restaurateurs of the Year by the Nebraska Restaurant Association." },
+  { year: "2021", text: "After three generations of the family (the Schultzes, the Reetzes, Tom & Suzanne Vanous), Bryan & Renee Jantz take over." },
+];
+
+export const honors = [
+  "Restaurateurs of the Year, Nebraska Restaurant Association, 1994",
+  "Named the No. 1 tour bus stop in Nebraska",
+];
+
+// The Experience + Events & Catering pages.
+export const rooms = {
+  dining: [
+    { name: "West Dining Room", line: "Stained and etched glass, brass, mahogany and oak. A business lunch or an elegant evening out." },
+    { name: "East Dining Room", line: "Casual dining at its best. Slide into a booth for lunch, or homemade dessert and fresh coffee." },
+  ],
+  hobnob: {
+    name: "Hob-Nob Lounge",
+    happyHour: "Weekdays 5 – 7pm",
+    line: "Friendly and relaxed, with a soup and salad bar of 30-plus items and happy hour on weekdays.",
+  },
+  private: [
+    { name: "Shir-Ra Room", seats: "Up to 100", line: "Elegant and versatile. Banquet rows, U or E shapes, conference style, or rounds of eight. Divides for smaller parties; projection screen on request." },
+    { name: "Tommy-Suz Beer Garden", seats: "Up to 250", line: "Its own saloon, a small stage, screen and sound system, antique gas pumps and neon. Meetings, parties, weddings." },
+  ],
+  catering: {
+    range: "25 to 5,000 guests",
+    area: "York, Lincoln, Grand Island, Seward, Columbus and around",
+    line: "Full-service, off-premises, year-round: menu planning, hors d’oeuvres to desserts, served by an experienced staff.",
+  },
+  fine: "No room fee for private rooms with meal service. Tax and a 17% gratuity are added to private events. Wi-Fi throughout.",
+};
+
 export const nav = [
   { href: "#plate", label: "Build a plate" },
   { href: "#story", label: "Story" },
@@ -88,10 +130,10 @@ export const nav = [
 
 // ---- Build Your Plate ------------------------------------------------------
 
+// The two cuts on the printed menu (both market price).
 export const cuts = [
-  { id: "petite", name: "Petite", oz: 8, line: "Still a real supper.", scale: 0.88 },
-  { id: "house", name: "House", oz: 12, line: "The sweet spot.", scale: 1 },
-  { id: "hungry", name: "Hungry", oz: 16, line: "You skipped lunch.", scale: 1.12 },
+  { id: "regular", name: "Regular", line: "Regular Cut. Market price.", scale: 1 },
+  { id: "husker", name: "Husker", line: "Husker Cut. The big one. Market price.", scale: 1.16 },
 ] as const;
 export type CutId = (typeof cuts)[number]["id"];
 
@@ -104,11 +146,17 @@ export const doneness = [
   { id: "w", name: "Well done", short: "Well", line: "Cooked through. Still cuts with a butter knife.", center: "#97705c", band: "#8a6450", size: 0.45 },
 ] as const;
 
-export const sides = [
-  { id: "mash", name: "Real mashed potatoes", ticket: "real mashed", line: "Real potatoes. Not instant." },
-  { id: "veg", name: "Seasonal vegetables", ticket: "seasonal veg", line: "Whatever's good this time of year." },
-  { id: "shroom", name: "Mushrooms", ticket: "mushrooms", line: "Sautéed. Piled on the side." },
+// "Your choice of Potato" from the printed menu; every dinner comes with one.
+export const potatoes = [
+  { id: "mash", name: "Really Real Mashed", ticket: "really real mashed" },
+  { id: "baked", name: "Baked", ticket: "baked potato" },
+  { id: "hash", name: "Hash Browns", ticket: "hash browns" },
+  { id: "fries", name: "French Fries", ticket: "fries" },
+  { id: "pilaf", name: "Rice Pilaf", ticket: "rice pilaf" },
+  { id: "veg", name: "Steamed Vegetables", ticket: "steamed veg" },
 ] as const;
-export type SideId = (typeof sides)[number]["id"];
+export type PotatoId = (typeof potatoes)[number]["id"];
+// "Served with our Special Sauteed Mushrooms, if you like."
+export const mushrooms = { name: "Special Sautéed Mushrooms", line: "Served with the prime rib, if you like." };
 
 export const MAX_LADLES = 3;

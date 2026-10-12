@@ -1,4 +1,4 @@
-import { site } from "@/lib/site";
+import { hours, site } from "@/lib/site";
 import { BrandLockup } from "./BrandMark";
 import { Container } from "./ui";
 
@@ -17,10 +17,13 @@ export default function Footer() {
           <a href={site.phone.href} className="mt-2 block text-lg font-semibold tabular-nums text-cream hover:text-brass-bright">
             {site.phone.display}
           </a>
-          <a href={`mailto:${site.cateringEmail}`} className="block break-all hover:text-cream">
+          <a href={`mailto:${site.cateringEmail}`} className="block break-all py-1.5 hover:text-cream">
             {site.cateringEmail}
           </a>
-          <a href={site.facebook} target="_blank" rel="noopener" className="mt-1 block hover:text-cream">
+          <a href="/menu" className="block py-1.5 hover:text-cream">
+            The menu
+          </a>
+          <a href={site.facebook} target="_blank" rel="noopener" className="block py-1.5 hover:text-cream">
             Facebook
           </a>
         </div>
@@ -31,9 +34,17 @@ export default function Footer() {
             <br />
             {site.address.city}, {site.address.region} {site.address.zip}
           </address>
+          <ul className="mt-3 space-y-0.5 text-sm">
+            {hours.map((h) => (
+              <li key={h.label} className="flex justify-between gap-4">
+                <span>{h.label}</span>
+                <span className="tabular-nums text-linen">{h.time}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </Container>
-      <Container className="mt-10 flex flex-col gap-1 border-t border-white/[0.06] pt-6 text-sm text-tan/70 max-sm:mt-6 max-sm:pt-4 max-sm:text-xs sm:flex-row sm:justify-between">
+      <Container className="mt-10 flex flex-col gap-1 border-t border-white/[0.06] pt-6 text-sm text-tan max-sm:mt-6 max-sm:pt-4 max-sm:text-xs sm:flex-row sm:justify-between">
         <p>
           © {new Date().getFullYear()} {site.fullName}
         </p>
