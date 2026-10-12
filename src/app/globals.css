@@ -412,3 +412,74 @@ body {
 a[href^="tel:"]:not(.brass) {
   white-space: nowrap;
 }
+
+/* ------------------------------------------------------------------
+   Footer easter egg (SpaceTruck.tsx): the food truck flies to the T3K planet
+   ------------------------------------------------------------------ */
+.space-truck {
+  position: absolute;
+  left: 0;
+  top: 0;
+  offset-distance: 0%;
+  opacity: 0;
+}
+/* Size and the hover bob go on the drawing, not the moving box: a scale or translate on the box itself
+   would scale its whole flight path too, and it would land short of the planet. */
+.space-truck > svg {
+  scale: 0.8;
+}
+.space-truck.parked {
+  offset-distance: 100%;
+  opacity: 1;
+}
+@media (max-width: 639.98px) {
+  .space-truck > svg {
+    scale: 0.62;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .space-truck.flying {
+    animation: truck-fly 5.2s cubic-bezier(0.42, 0.05, 0.25, 1) forwards;
+  }
+  @keyframes truck-fly {
+    0% { offset-distance: 0%; opacity: 0; }
+    6% { opacity: 1; }
+    100% { offset-distance: 100%; opacity: 1; }
+  }
+  .space-truck.parked > svg {
+    animation: truck-bob 3.2s ease-in-out infinite;
+  }
+  @keyframes truck-bob {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -5px; }
+  }
+  .truck-flame {
+    transform-box: fill-box;
+    transform-origin: 100% 50%;
+    animation: truck-flame 0.18s ease-in-out infinite alternate;
+  }
+  .space-truck.parked .truck-flame {
+    animation-duration: 0.5s;
+    opacity: 0.45;
+  }
+  @keyframes truck-flame {
+    from { transform: scaleX(0.75); }
+    to { transform: scaleX(1.15); }
+  }
+  .t3k-ring {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: t3k-glint 6s ease-in-out infinite;
+  }
+  @keyframes t3k-glint {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 0.95; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .space-truck {
+    offset-distance: 100%;
+    offset-rotate: 0deg !important;
+    opacity: 1;
+  }
+}

@@ -1,10 +1,11 @@
 import { hours, site } from "@/lib/site";
+import T3KCredit from "./T3KCredit";
 import { BrandLockup } from "./BrandMark";
 import { Container } from "./ui";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-brass/15 bg-walnut-950 pb-10 pt-12 max-lg:pt-8">
+    <footer className="overflow-hidden border-t border-brass/15 bg-walnut-950 pb-10 pt-12 max-lg:pt-8">
       <Container className="grid gap-8 max-sm:gap-5 sm:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <BrandLockup />
@@ -44,11 +45,11 @@ export default function Footer() {
           </ul>
         </div>
       </Container>
-      <Container className="mt-10 flex flex-col gap-1 border-t border-white/[0.06] pt-6 text-sm text-tan max-sm:mt-6 max-sm:pt-4 max-sm:text-xs sm:flex-row sm:justify-between">
+      <Container className="relative mt-10 flex flex-col gap-3 border-t border-white/[0.06] pt-6 text-sm text-tan max-sm:mt-6 max-sm:pt-4 max-sm:text-xs sm:flex-row sm:items-center sm:justify-between">
         <p>
           © {new Date().getFullYear()} {site.fullName}
         </p>
-        {site.spec && <p>Proposed site by T3KDesigns</p>}
+        {site.spec && <T3KCredit />}
       </Container>
     </footer>
   );
