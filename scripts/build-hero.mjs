@@ -1,5 +1,6 @@
 // Cuts the painted prime-rib plate out of the approved hero mockup and writes web-ready sizes.
-// Run: npm run hero   (source: assets-src/hero-mockup.webp, kept out of git because it has mockup text baked in)
+// Run: npm run hero   (source: assets-src/hero-mockup.webp = the approved apex_logo_main.webp mockup, kept out of
+// git because it has placeholder text baked in, like "Omaha")
 //
 //   public/images/hero-plate-1600.webp   desktop
 //   public/images/hero-plate-900.webp    phones
@@ -15,7 +16,10 @@ const out = join(root, "public", "images");
 mkdirSync(out, { recursive: true });
 
 // The painting only, below the mockup's header band and right of its headline.
-const crop = { left: 900, top: 222, width: 1100, height: 840 };
+// Measured on the 2000px-wide copy; scale to whatever size the source is (apex_logo_main.webp is 2048).
+const { width: srcW } = await sharp(src).metadata();
+const k = srcW / 2000;
+const crop = { left: Math.round(900 * k), top: Math.round(222 * k), width: Math.round(1100 * k), height: Math.round(840 * k) };
 const base = sharp(src).extract(crop);
 
 for (const w of [1600, 900]) {
