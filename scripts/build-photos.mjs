@@ -5,7 +5,7 @@
 // Every photo gets the same warm, low-light grade so phone snapshots sit next to the painting:
 // slightly darker and less saturated, a soft-light brass wash, and a gentle vignette.
 
-import { mkdirSync } from "node:fs";
+import { mkdirSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import sharp from "sharp";
 
@@ -75,6 +75,20 @@ for (const w of [520, 900]) {
     .toFile(join(out, `menu-cover-${w}.webp`));
 }
 console.log("menu-cover: 520, 900");
+
+// The little red-and-white spot illustrations from inside the printed menu (pages 2-4), pulled out of the PDF
+// with their transparency into assets-src/menu/art/<name>.png. Small to begin with (130-370px), so they're
+// trimmed and kept at their own size, never enlarged.
+const artSrc = join(root, "assets-src", "menu", "art");
+const artOut = join(root, "public", "images", "art");
+mkdirSync(artOut, { recursive: true });
+for (const f of readdirSync(artSrc).filter((f) => f.endsWith(".png"))) {
+  const info = await sharp(join(artSrc, f))
+    .trim()
+    .webp({ quality: 90, alphaQuality: 100, effort: 6 })
+    .toFile(join(artOut, f.replace(/\.png$/, ".webp")));
+  console.log(`art ${f}: ${info.width}×${info.height}`);
+}
 
 for (const c of closeups) {
   for (const w of c.widths) {

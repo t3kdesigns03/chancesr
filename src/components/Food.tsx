@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { quotes, site } from "@/lib/site";
+import MenuArt from "./MenuArt";
 import Photo, { type PhotoName } from "./Photo";
 import { Container, SectionLabel, SectionTitle } from "./ui";
 import UpcomingBuffets from "./UpcomingBuffets";
@@ -120,16 +121,15 @@ function MenuLink({ href, children }: { href: string; children: ReactNode }) {
   );
 }
 
-/** No photo of the chicken yet, so it gets a brass-framed menu-card panel instead. */
+/** No photo of the chicken yet, so it gets a brass-framed menu card with the drumsticks drawn on their printed menu. */
 function ChickenPlate() {
   return (
-    <div className="tabletop grid h-full w-full place-items-center">
-      <div className="relative m-6 grid place-items-center rounded-xl border border-brass/50 px-6 py-5 text-center">
-        <span aria-hidden="true" className="absolute inset-1.5 rounded-lg border border-brass/20" />
-        <p className="label text-[0.55rem] text-brass">The famous</p>
-        <p className="display mt-1 text-3xl italic text-cream">Pan-fried</p>
-        <p className="display text-xl text-brass-bright">chicken</p>
-        <p className="label mt-2 text-[0.5rem] text-tan">All white meat, if you ask</p>
+    <div className="tabletop relative h-full w-full">
+      <span aria-hidden="true" className="absolute inset-4 rounded-xl border border-brass/50" />
+      <span aria-hidden="true" className="absolute inset-[22px] rounded-lg border border-brass/20" />
+      <div className="relative flex h-full flex-col items-center justify-center gap-2 pb-5 pt-7">
+        <p className="label text-[0.55rem] text-brass">The famous &middot; family recipe</p>
+        <MenuArt name="chicken" className="h-[62%] min-h-0 w-auto -rotate-6 drop-shadow-[0_8px_12px_rgb(0_0_0/0.55)]" />
       </div>
     </div>
   );

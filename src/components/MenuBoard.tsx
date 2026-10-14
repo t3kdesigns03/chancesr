@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { breakfast, dinner, lounge, menuNotes, type MenuItem, type MenuSection, type MenuTab } from "@/lib/menu";
+import MenuArt from "./MenuArt";
 
 const TABS: MenuTab[] = [dinner, breakfast, lounge];
 
@@ -166,12 +167,16 @@ function Section({ section: s, order }: { section: MenuSection; order: number })
         s.boxed ? "rounded-lg border border-red/35 bg-paper-box p-5 max-sm:p-4" : ""
       }`}
     >
-      <h2
-        id={`${s.id}-h`}
-        className="font-tuscan text-[1.75rem] uppercase leading-[1.05] tracking-wide text-red [text-shadow:2px_2px_0_rgb(165_28_48/0.18)] max-sm:text-[1.45rem]"
-      >
-        {s.title}
-      </h2>
+      {/* The printed menu sets a little drawing just after the heading */}
+      <div className="flex items-center gap-3">
+        <h2
+          id={`${s.id}-h`}
+          className="font-tuscan text-[1.75rem] uppercase leading-[1.05] tracking-wide text-red [text-shadow:2px_2px_0_rgb(165_28_48/0.18)] max-sm:text-[1.45rem]"
+        >
+          {s.title}
+        </h2>
+        {s.art && <MenuArt name={s.art} className="h-14 w-auto max-w-20 shrink-0 object-contain max-sm:h-11 max-sm:max-w-16" />}
+      </div>
       {s.note && <p className="mt-2 text-[0.85rem] italic leading-snug text-ink/80">{s.note}</p>}
 
       {s.columns ? <WineTable section={s} /> : (

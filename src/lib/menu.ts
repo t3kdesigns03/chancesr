@@ -2,6 +2,8 @@
 // the PDFs on chancesryork.com). Names, descriptions and prices as printed. `star` marks the items the printed
 // menu flags with an asterisk for the consumer advisory.
 
+import type { ArtName } from "@/components/MenuArt";
+
 export type Price = { label?: string; price: string };
 export type MenuItem = {
   name: string;
@@ -15,6 +17,7 @@ export type MenuSection = {
   title: string;
   note?: string;
   boxed?: boolean; // printed inside a tinted panel
+  art?: ArtName; // the printed menu's drawing beside this heading
   columns?: string[]; // column headers for wine-style tables
   items: MenuItem[];
   list?: string[]; // plain lists (deli case, brunch spread)
@@ -32,6 +35,7 @@ export const dinner: MenuTab = {
   sections: [
     {
       id: "beef-country",
+      art: "steak",
       title: "Beef Country",
       boxed: true,
       note: "We Char-Broil our Steaks to give them that Great Outdoor Flavor. All Steaks are Choice Cuts of Nebraska Beef, specially aged for Just The Right Flavor. Steaks are topped with Onion Fritters or Garlic Butter, if you like.",
@@ -54,6 +58,7 @@ export const dinner: MenuTab = {
     },
     {
       id: "out-of-the-blue",
+      art: "seafood",
       title: "Out of the Blue",
       items: [
         { name: "Jumbo Shrimp", desc: "Golden Fried Shrimp. We prepare our own. Served with a Tangy Cocktail Sauce", price: "27.45" },
@@ -68,6 +73,7 @@ export const dinner: MenuTab = {
     },
     {
       id: "r-specialties",
+      art: "ribs",
       title: "“R” Specialties",
       boxed: true,
       items: [
@@ -91,6 +97,7 @@ export const dinner: MenuTab = {
     },
     {
       id: "pastas",
+      art: "pasta",
       title: "Pleasing Pastas",
       note: "All pasta is served with Fresh Tossed Greens and Homemade Garlic Bread.",
       items: [
@@ -120,6 +127,7 @@ export const dinner: MenuTab = {
     },
     {
       id: "beginning-pleasures",
+      art: "shrimp-cocktail",
       title: "Beginning Pleasures",
       boxed: true,
       items: [
@@ -138,6 +146,7 @@ export const dinner: MenuTab = {
     },
     {
       id: "soups-salads",
+      art: "salad",
       title: "Super Soups & Salads",
       boxed: true,
       note: "“R” Homemade Salad Dressings are French, Blue Cheese, Thousand Island and Ranch.",
@@ -160,6 +169,7 @@ export const dinner: MenuTab = {
     },
     {
       id: "basket-cases",
+      art: "chicken",
       title: "Basket Cases",
       note: "Basket Dinners are served with French Fries and Warm Sour Dough Rolls.",
       items: [
@@ -169,6 +179,7 @@ export const dinner: MenuTab = {
     },
     {
       id: "burgers",
+      art: "burger",
       title: "Burgers",
       note: "All Burgers are served with French Fries and Dill Pickle Chips.",
       items: [
@@ -236,6 +247,7 @@ export const dinner: MenuTab = {
     },
     {
       id: "on-the-side",
+      art: "sides",
       title: "On the Side",
       items: [
         { name: "Loaded Baked Potato", price: "5.85" },
@@ -250,6 +262,7 @@ export const dinner: MenuTab = {
     },
     {
       id: "final-flings",
+      art: "pastries",
       title: "Final Flings",
       boxed: true,
       note: "Fresh from our Bake Shoppe. Wonderful Assortment of Gourmet Pastries & Cakes.",
@@ -270,6 +283,7 @@ export const dinner: MenuTab = {
     },
     {
       id: "wet-your-whistle",
+      art: "mug",
       title: "Wet Your Whistle",
       items: [
         { name: "Root Beer Float", price: "5.95" },
@@ -381,6 +395,7 @@ export const breakfast: MenuTab = {
   sections: [
     {
       id: "pastry-shop",
+      art: "pastries",
       title: "From the Pastry Shop",
       items: [
         { name: "Bagel (with Cream Cheese)", price: "2.95" },
@@ -453,6 +468,7 @@ export const breakfast: MenuTab = {
     },
     {
       id: "beverages",
+      art: "mug",
       title: "Beverages",
       items: [
         { name: "Freshly Brewed Coffee", price: "2.75" },
